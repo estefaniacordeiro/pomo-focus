@@ -9,4 +9,5 @@
 
 .Tasks-list-item:hover {
   cursor: pointer;
+  background: lightblue;
 }
