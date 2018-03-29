@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, TimePicker, InputNumber } from 'antd';
+import { Modal, TimePicker, InputNumber, Alert } from 'antd';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import T from '../constants';
@@ -25,7 +25,8 @@ class Settings extends React.Component {
       focusTime,
       shortBreak,
       longBreak,
-      totalSessions
+      totalSessions,
+      alert: null
     }
   }
 
@@ -43,7 +44,15 @@ class Settings extends React.Component {
   }
 
   handleSessionsChange = num => {
+    if ( num !== '' && typeof num !== 'number') {
+      const alert = 'Total sessions can be numbers only!'
+      this.setState({
+        alert
+      })
+      return;
+    }
     this.setState({
+      alert: null,
       totalSessions: num
     })
   }
@@ -66,7 +75,7 @@ class Settings extends React.Component {
 
   render() {
     const { openModal, close } = this.props;
-    const { focusTime, shortBreak, longBreak, totalSessions } = this.state;
+    const { focusTime, shortBreak, longBreak, totalSessions, alert } = this.state;
 
     return (
       <Modal
@@ -76,7 +85,7 @@ class Settings extends React.Component {
         onCancel={close}
       >
       <div className="Settings-content">
-
+        { alert ? <Alert type="error" message={alert} showIcon /> : null}
         <div className="Settings-item">
           <div className="Settings-item-name">Focus time(min)  </div>
           <TimePicker 
