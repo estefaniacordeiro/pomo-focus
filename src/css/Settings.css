@@ -1,0 +1,18 @@
+.Settings-content {
+
+}
+
+.Settings-item {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.Settings-item-name {
+  width: 110px;
+}
+
+.Settings-set-sessions {
+  width: 128px;
+}

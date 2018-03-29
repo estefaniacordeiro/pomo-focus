@@ -1,0 +1,36 @@
+.Timer-wrapper {
+  position: relative;
+  height: 300px;
+  width: 300px;
+  border: 1px solid;
+  border-radius: 150px;
+  margin: 0 auto;
+}
+
+.Timer-time-display {
+  position: absolute;
+    top: 105px;
+    left: 44px;
+    font-size: 70px;
+}
+
+.fa-play {
+  position: absolute;
+  top: 120px;
+  left: 120px;
+  font-size: 70px;
+}
+
+.fa-stop {
+  position: absolute;
+  top: 120px;
+  left: 120px;
+  font-size: 70px;
+}
+
+.Timer-fa-play-wrapper {
+  position: relative;
+  height: 100%;
+  background: grey;
+  border-radius: 150px;
+}

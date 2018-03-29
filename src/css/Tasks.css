@@ -1,0 +1,12 @@
+.Tasks-wrapper {
+  width: 300px;
+  margin: 20px auto;
+}
+
+.Tasks-button {
+  font-size: 22px;
+}
+
+.Tasks-list-item:hover {
+  cursor: pointer;
+}
