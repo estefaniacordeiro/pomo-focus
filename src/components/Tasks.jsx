@@ -58,7 +58,7 @@ class Tasks extends React.Component {
     const value = e.target.value;
     const newTask = {
       name: value,
-      lastTime: Date.now(),
+      lastUpdated: Date.now(),
       stats: {}
     }
     addTask(newTask);
@@ -77,13 +77,13 @@ class Tasks extends React.Component {
     })
   }
 
-  switchTask = lastTime => {
+  switchTask = lastUpdated => {
     const { tasks, setCurrentTask } = this.props;
     let index;
     tasks.forEach( (task, i) => {
-      if (task.lastTime === lastTime) {
+      if (task.lastUpdated === lastUpdated) {
         index = i;
-        task.lastTime = Date.now();
+        task.lastUpdated = Date.now();
       }
     })
     const removedTasksArr = tasks.splice(index, 1);
@@ -116,8 +116,8 @@ class Tasks extends React.Component {
           renderItem={ item => {
             return (<List.Item
                       className="Tasks-list-item" 
-                      data-timestamp={item.lastTime} 
-                      onClick={() => this.switchTask(item.lastTime)}
+                      data-timestamp={item.lastUpdated} 
+                      onClick={() => this.switchTask(item.lastUpdated)}
                     >{item.name}</List.Item> )}
           }
         /> : 

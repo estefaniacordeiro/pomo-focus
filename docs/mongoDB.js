@@ -1,23 +1,14 @@
-store = {
-  timmer: {
-    min: 25,
-    mode: 'focus' || 'short-break' || 'long-break',
-    
-    ticking: true || false,
-    currentSession: 0
-  },
+User = {
+  username: 'name',
+  email: 'abc@gmail.com',
+  hash: String,
+  salt: String,
 
   settings: {
     focusTime: 25,
     shortBreak: 5,
     longBreak: 15,
     sessionsGoal: 4
-  },
-
-  stats: {
-    'date': [
-      { timestamp: 'timestamp', task: 'task', focusTime: 30 }
-    ]
   },
 
   tasks: [
@@ -29,8 +20,12 @@ store = {
         ]
       }
     }
-  ]
-  
+  ],
 
+  stats: {
+    'date': [
+      { timestamp: 'timestamp', task: 'task', focusTime: 30 }
+    ]
+  }
 
 }

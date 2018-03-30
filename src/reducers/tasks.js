@@ -1,9 +1,9 @@
 import T from '../constants';
 
 const defaultState = [
-  {name: 'Pomo timer project', lastTime: 1522265421000, stats: { totalMinutes: 0 }},
-  {name: 'Smartphone assignment', lastTime: 1522265421002, stats: { totalMinutes: 0 }},
-  {name: 'Doing exercise', lastTime: 1522265421004, stats: { totalMinutes: 0 }}
+  {name: 'Pomo timer project', lastUpdated: 1522265421000, stats: { totalMinutes: 0 }},
+  {name: 'Smartphone assignment', lastUpdated: 1522265421002, stats: { totalMinutes: 0 }},
+  {name: 'Doing exercise', lastUpdated: 1522265421004, stats: { totalMinutes: 0 }}
 ]
 
 export default (state=[...defaultState], action) => {
