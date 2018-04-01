@@ -11,13 +11,13 @@ const UserSchema = new mongoose.Schema({
   hash: String,
   salt: String,
   settings: {
-    focusTime: Number,
-    shortBreak: Number,
-    longBreak: Number,
-    totalSessions: Number
+    focusTime: { type: Number, default: 25 },
+    shortBreak: { type: Number, default: 5 },
+    longBreak: { type: Number, default: 15 },
+    totalSessions: { type: Number, default: 4}
   },
   stats: { type: Schema.Types.Mixed, default: {} },
-  tasks: [ { name: String, lastUpdated: Number, stats: Schema.Types.Mixed } ] 
+  tasks: [ { name: String, lastUpdated: Number, stats: { type: Schema.Types.Mixed, default: {} } } ] 
 });
 
 UserSchema.plugin( uniqueValidator, { message: 'is already taken' });

@@ -4,22 +4,12 @@ const passport = require('passport');
 const User = mongoose.model('User');
 const auth = require('../auth');
 
-const defaultSettings = {
-  focusTime: 25,
-  shortBreak: 5,
-  longBreak: 15,
-  totalSessions: 4
-}
 
 router.post('/', (req, res, next) => {
   const user = new User();
 
   user.email = req.body.user.email;
   user.setPassword(req.body.user.password);
-
-  user.settings = {...defaultSettings};
-  user.stats = {};
-
 
   user.save().then( () => {
     return res.json({user: user.toAuthJSON()});
