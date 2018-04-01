@@ -13,7 +13,7 @@ router.get('/all', auth.required, (req, res, next) => {
     return res.json({
       tasks: user.tasks
     });
-  })
+  }).catch(next);
 })
 
 // Add new task

@@ -16,7 +16,7 @@ const UserSchema = new mongoose.Schema({
     longBreak: Number,
     totalSessions: Number
   },
-  stats: Schema.Types.Mixed,
+  stats: { type: Schema.Types.Mixed, default: {} },
   tasks: [ { name: String, lastUpdated: Number, stats: Schema.Types.Mixed } ] 
 });
 
