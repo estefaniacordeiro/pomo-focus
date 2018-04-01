@@ -48,12 +48,6 @@ router.post('/login', (req, res, next) => {
   })(req, res, next);
 });
 
-router.get('/settings', auth.required, (req, res, next) => {
-  User.findById(req.payload.id).then( user => {
-    if (!user) return res.sendStatus(401);
-    console.log('GET settings');
-    return res.json({ settings: user.settings });
-  }).catch(next);
-})
+
 
 module.exports = router;
