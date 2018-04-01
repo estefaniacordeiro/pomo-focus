@@ -6,7 +6,7 @@ const http = require('http'),
       passport = require('passport'),
       mongoose = require('mongoose'),
       morgan = require('morgan'),
-      session = require('exress-session'),
+      session = require('express-session'),
       fs = require('fs'),
       errorHandler = require('errorhandler')
 
@@ -34,6 +34,7 @@ if (isProduction) {
 }
 
 require('./models/User');
+require('./config/passport');
 
 app.use(require('./routes'));
 
@@ -74,5 +75,5 @@ app.use( (err, req, res, next) => {
 });
 
 const server = app.listen( process.env.PORT || 3000, function() {
-  console.log('Listening on port ' + sercer.address().port);
+  console.log('Listening on port ' + server.address().port);
 });

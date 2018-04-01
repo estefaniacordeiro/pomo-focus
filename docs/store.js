@@ -11,12 +11,15 @@ store = {
     focusTime: 25,
     shortBreak: 5,
     longBreak: 15,
-    sessionsGoal: 4
+    totalSessions: 4
   },
 
   stats: {
-    'date': [
+    '03292018': [
       { timestamp: 'timestamp', task: 'task', focusTime: 30 }
+    ],
+    '03302018': [
+      { timestamp: 'timestamp', task: 'task', focusTime: 30 } 
     ]
   },
 
