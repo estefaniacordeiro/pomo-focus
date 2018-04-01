@@ -31,8 +31,7 @@ class Timer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      min: props.min,
-      sec: 0,
+      totalSec: props.min * 60,
       hoveredOnTimer: false
     }
     this.timer = null;
@@ -40,22 +39,20 @@ class Timer extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { min } = nextProps;
-
+    console.log(" Will receive props" ,{ min });
+    
     this.setState({
-      min
-    })
+      totalSec: min * 60
+    });
   }
 
   startTimer() {
-    let { min, sec } = this.state;
+    let { totalSec } = this.state;
     this.props.startTimer();
-    let totalSec = min * 60 + sec;
+    totalSec--;
     this.timer = setInterval( () => {
-      min = parseInt(totalSec / 60);
-      sec = parseInt(totalSec % 60);
       this.setState({
-        min,
-        sec
+        totalSec
       });
       if (--totalSec < 0) {
         clearInterval(this.timer);
@@ -63,7 +60,6 @@ class Timer extends React.Component {
         this.timerEnded();
       }
     }, 1000);
-
   }
 
   timerEnded() {
@@ -103,7 +99,7 @@ class Timer extends React.Component {
     clearInterval(this.timer);
     this.timer = null;
     this.props.endTimer();
-    this.setState({min: this.props.min, sec: 0}); 
+    this.setState({ totalSec: this.props.min * 60 }); 
   }
 
   clickTimer() {
@@ -130,15 +126,18 @@ class Timer extends React.Component {
 
 
   render() {
-    const { min, sec, hoveredOnTimer } = this.state;
+    const { totalSec, hoveredOnTimer } = this.state;
     const { mode, currentSession, totalSessions, ticking } = this.props;
+    const min = parseInt(totalSec / 60),
+          sec = parseInt(totalSec % 60);
     let timerDisplay;
+
     if (hoveredOnTimer) {
       timerDisplay = ticking ? 
       (<i className="fas fa-stop"></i>) :
       (<i className="fas fa-play"></i>)
     } else {
-      timerDisplay = <div className="Timer-time-display">{`${min < 10 ? '0'+min : min} : ${sec < 10 ? '0' + sec : sec}`}</div>
+      timerDisplay = <div className="Timer-time-display">{`${min < 10 ? '0' + min : min} : ${sec < 10 ? '0' + sec : sec}`}</div>
     }
 
     return (
