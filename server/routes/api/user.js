@@ -18,6 +18,8 @@ router.post('/', (req, res, next) => {
   user.setPassword(req.body.user.password);
 
   user.settings = {...defaultSettings};
+  user.stats = {};
+
 
   user.save().then( () => {
     return res.json({user: user.toAuthJSON()});

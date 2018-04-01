@@ -16,19 +16,21 @@ store = {
 
   stats: {
     '03292018': [
-      { timestamp: 'timestamp', task: 'task', focusTime: 30 }
+      { endedAt: 'timestamp', task: 'task', focusTime: 30 }
     ],
     '03302018': [
-      { timestamp: 'timestamp', task: 'task', focusTime: 30 } 
+      { endedAt: 'timestamp', task: 'task', focusTime: 30 } 
     ]
   },
 
   tasks: [
-    { name: 'name', lastUpdated: 1347234789, 
+    { name: 'name', 
+      _id: 'adsfjasdfjlasd',
+      lastUpdated: 1347234789, 
       stats: {
         totalMinutes: 100,
         'date': [
-          {timestamp: 'timestamp', focusTime: 30 },
+          {endedAt: 'timestamp', focusTime: 30 },
         ]
       }
     }
