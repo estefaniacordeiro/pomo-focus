@@ -4,8 +4,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: lightblue;
   height: 100px;
+  color: black;
 }
 
 .App-header-name {
@@ -13,16 +13,28 @@
   font-size: 70px;
 }
 
+
+
 .nav-button {
   font-size: 30px;
   margin: 0 10px;
   color: lightslategray;
-  transition: font-size 0.1s linear,
-              color 0.1s linear;
+  /* transition: font-size 0.1s linear,
+              color 0.1s linear; */
+  transition: all .2s ease-in-out;
+}
+
+.fa-chart-pie.nav-button {
+  right: 70px;
+}
+
+.fa-sliders-h.nav-button {
+  right: 10px;
 }
 
 .nav-button:hover {
-  font-size: 40px;
+  /* font-size: 40px; */
+  transform: scale(1.3);
   color: black;
 }
 

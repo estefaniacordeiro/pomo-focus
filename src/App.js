@@ -6,6 +6,8 @@ import { Route, Switch } from 'react-router-dom';
 import Home from './components/Home';
 import Settings from './components/Settings';
 
+import { Popover } from 'antd';
+
 class App extends Component {
 
   constructor(props) {
@@ -33,13 +35,22 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header-wrapper">
+          <span className="App-header-version-number">
+            V 0.0.1
+          </span>
           <span className="App-header-name">
             Pomo timer
           </span>
           <div className="App-header-buttons">
-            <i className="fas fa-chart-pie nav-button" />
-            <i className="fas fa-sliders-h nav-button" onClick={this.openSettings} />
-  
+            <Popover content="Statistics" placement="bottom">
+              <i className="fas fa-chart-pie nav-button" />
+            </ Popover>
+            <Popover content="Settings" placement="bottom">
+              <i className="fas fa-sliders-h nav-button" onClick={this.openSettings} />
+            </ Popover>
+            <Popover content={"Profile"} placement="bottomRight">
+              <i className="fas fa-user nav-button" />
+            </ Popover>
           </div>
         </header>
         <Settings visible={settingsVisible} close={this.closeSettings} />
