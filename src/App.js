@@ -1,66 +1,48 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import logo from './logo.svg';
 import './App.css';
 import { Route, Switch } from 'react-router-dom';
+import T from './constants';
 
 import Home from './components/Home';
 import Settings from './components/Settings';
+import Register from './components/Register';
+import SignIn from './components/SignIn';
+import Header from './components/Header';
 
 import { Popover } from 'antd';
 
+const mapStateToProps = state => ({
+  settingsOpen: state.settings.modalOpen
+})
+
+const mapDispatchToProps = dispatch => ({
+  closeSettings: () => dispatch({ type: T.CLOSE_SETTINGS, payload: { modalOpen: false}})
+})
+
+
 class App extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      settingsVisible: false
-    }
-  }
-
-  openSettings = () => {
-    this.setState({
-      settingsVisible: true
-    })
-  }
-
-  closeSettings = () => {
-    this.setState({
-      settingsVisible: false
-    })
-  }
-
   render() {
-    const { settingsVisible } = this.state;
+    const { settingsOpen, closeSettings } = this.props;
 
     return (
       <div className="App">
-        <header className="App-header-wrapper">
-          <span className="App-header-version-number">
-            V 0.0.1
-          </span>
-          <span className="App-header-name">
-            Pomo timer
-          </span>
-          <div className="App-header-buttons">
-            <Popover content="Statistics" placement="bottom">
-              <i className="fas fa-chart-pie nav-button" />
-            </ Popover>
-            <Popover content="Settings" placement="bottom">
-              <i className="fas fa-sliders-h nav-button" onClick={this.openSettings} />
-            </ Popover>
-            <Popover content={"Profile"} placement="bottomRight">
-              <i className="fas fa-user nav-button" />
-            </ Popover>
-          </div>
-        </header>
-        <Settings visible={settingsVisible} close={this.closeSettings} />
+        
+        <Header />
+        <Settings visible={settingsOpen} close={closeSettings} />
 
         <Switch>
           <Route exact path="/" component={Home} />
+          <Route path="/register" component={Register} />
+          <Route path="/sign-in" component={SignIn} />
         </Switch>
       </div>
     );
   }
 }
 
-export default App;
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
