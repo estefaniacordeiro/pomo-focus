@@ -27,9 +27,11 @@ class Header extends React.Component {
         <span className="App-header-version-number">
           V 0.0.1
         </span>
-        <span className="App-header-name">
-          Pomo timer
-        </span>
+        <Link to='/'>
+          <span className="App-header-name">
+            Pomo timer
+          </span>
+        </ Link>
         <div className="App-header-buttons">
           <Popover content="Statistics" placement="bottom">
             <i className="fas fa-chart-pie nav-button" />
