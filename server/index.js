@@ -8,12 +8,14 @@ const http = require('http'),
       morgan = require('morgan'),
       session = require('express-session'),
       fs = require('fs'),
-      errorHandler = require('errorhandler')
+      errorHandler = require('errorhandler'),
+      cors = require('cors')
 
 const isProduction = process.env.NODE_ENV === 'production';
 
 const app = express();
 
+app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
