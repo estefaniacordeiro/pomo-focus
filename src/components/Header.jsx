@@ -1,27 +1,42 @@
 import React from 'react';
 import { Popover } from 'antd';
-import T from '../constants';
+import ACTION from '../constants';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-const unloggedin = (
-  <ul>
-    <li>
-     <Link to='/register'>Sign Up</Link>
-    </li>
-    <li>
-      <Link to='/sign-in'>Sign In</Link>
-    </li>
-  </ul>
-)
+const mapStateToProps = state => ({
+  user: state.common.user
+})
 
 const mapDispatchToProps = dispatch => ({
-  openSettings: () => dispatch({ type: T.OPEN_SETTINGS, payload: { modalOpen: true } })
+  openSettings: () => dispatch({ type: ACTION.OPEN_SETTINGS, payload: { modalOpen: true } }),
+  logOut: () => dispatch({ type: ACTION.LOGOUT })
 })
 
 class Header extends React.Component {
+  
 
   render() {
+    const { user, logOut } = this.props;
+
+    const unLoggedInMenu = (
+      <ul>
+        <li>
+         <Link to='/register'>Sign Up</Link>
+        </li>
+        <li>
+          <Link to='/sign-in'>Sign In</Link>
+        </li>
+      </ul>
+    )
+    
+    const loggedInMenu = (
+      <div>
+        <div>{user}</div>
+        <a onClick={logOut}>Log out</a>
+      </div>
+    )
+
     return (
       <header className="App-header-wrapper">
         <span className="App-header-version-number">
@@ -39,7 +54,7 @@ class Header extends React.Component {
           <Popover content="Settings" placement="bottom">
             <i className="fas fa-sliders-h nav-button" onClick={this.props.openSettings} />
           </ Popover>
-          <Popover content={unloggedin} placement="bottomRight">
+          <Popover content={user ? loggedInMenu : unLoggedInMenu } placement="bottomRight">
             <i className="fas fa-user nav-button" />
           </ Popover>
         </div>
@@ -48,4 +63,4 @@ class Header extends React.Component {
   }
 }
 
-export default connect(null, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
