@@ -21,7 +21,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   closeSettings: () => dispatch({ type: ACTION.CLOSE_SETTINGS, payload: { modalOpen: false}}),
-  onRedirect: () => dispatch({ type: ACTION.REDIRECT })
+  onRedirect: () => dispatch({ type: ACTION.REDIRECT }),
+  onLoad: () => dispatch({ type: ACTION.APP_LOAD, payload: agent.Auth.current()})
 })
 
 
@@ -30,8 +31,8 @@ class App extends Component {
     const token = window.localStorage.getItem('jwt');
     if (token) {
       agent.setToken(token);
+      this.props.onLoad();
     }
-    
   }
 
   componentWillReceiveProps(nextProps) {
