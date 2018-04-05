@@ -1,16 +1,19 @@
 import React from 'react';
 import { Input, List } from 'antd';
 import { connect } from 'react-redux';
-import T from '../constants';
+import ACTION from '../constants';
 import '../css/Tasks.css';
+import agent from '../agent';
 
 const mapStateToProps = state => ({
   tasks: [...state.tasks]
 })
 
 const mapDispatchToProps = dispatch => ({
-  addTask: payload => dispatch({type: T.ADD_TASK, payload}),
-  setCurrentTask: payload => dispatch({type: T.SET_CURRENT_TASK, payload})
+  getAllTasks: () => dispatch({ type: ACTION.GET_ALL_TASKS, payload: agent.Tasks.all() }),
+  addTask: newTask => dispatch({type: ACTION.ADD_TASK, payload: agent.Tasks.addNewTask(newTask) }),
+  setCurrentTask: (id, lastUpdated, tasks) => 
+    dispatch({type: ACTION.SET_CURRENT_TASK, payload: agent.Tasks.setCurrentTasks(id, lastUpdated), tasks})
 })
 
 class Tasks extends React.Component {
@@ -23,7 +26,10 @@ class Tasks extends React.Component {
       inputValue: tasks.length > 0 ? tasks.slice(-1)[0].name : null,
       showList: false
     }
+  }
 
+  componentWillMount() {
+    this.props.getAllTasks();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -77,18 +83,18 @@ class Tasks extends React.Component {
     })
   }
 
-  switchTask = lastUpdated => {
+  switchTask = id => {
     const { tasks, setCurrentTask } = this.props;
     let index;
     tasks.forEach( (task, i) => {
-      if (task.lastUpdated === lastUpdated) {
+      if (task._id === id) {
         index = i;
         task.lastUpdated = Date.now();
       }
     })
     const removedTasksArr = tasks.splice(index, 1);
     tasks.push(removedTasksArr[0]);
-    setCurrentTask(tasks);
+    setCurrentTask(id, removedTasksArr[0].lastUpdated, tasks);
     this.closeTasksList();
   }
 
@@ -116,8 +122,7 @@ class Tasks extends React.Component {
           renderItem={ item => {
             return (<List.Item
                       className="Tasks-list-item" 
-                      data-timestamp={item.lastUpdated} 
-                      onClick={() => this.switchTask(item.lastUpdated)}
+                      onClick={() => this.switchTask(item._id)}
                     >{item.name}</List.Item> )}
           }
         /> : 
