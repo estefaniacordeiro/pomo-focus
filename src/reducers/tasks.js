@@ -1,20 +1,22 @@
-import T from '../constants';
+import ACTION from '../constants';
 
-const defaultState = [
-  {name: 'Pomo timer project', lastUpdated: 1522265421000, stats: { totalMinutes: 0 }},
-  {name: 'Smartphone assignment', lastUpdated: 1522265421002, stats: { totalMinutes: 0 }},
-  {name: 'Doing exercise', lastUpdated: 1522265421004, stats: { totalMinutes: 0 }}
-]
+const defaultState = [];
 
 export default (state=[...defaultState], action) => {
   switch(action.type) {
-    case T.ADD_TASK:
-      return [...state, action.payload];
+    case ACTION.GET_ALL_TASKS:
+      return [ ...action.payload.tasks ];
 
-    case T.SET_CURRENT_TASK: 
-      return [...action.payload];
+    case ACTION.ADD_TASK:
+      return [...state, action.payload.newTask];
 
-    case T.ADD_STATS:
+    case ACTION.SET_CURRENT_TASK: 
+      if (action.payload.success) {
+        return [...action.tasks];
+      }
+      return state;
+
+    case ACTION.ADD_STATS:
       const { focusTime, date, currentTask, timestamp } = action.payload;
       currentTask.stats.totalMinutes += focusTime;
       if (!currentTask.stats[date]) {
