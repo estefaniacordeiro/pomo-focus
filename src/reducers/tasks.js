@@ -17,13 +17,10 @@ export default (state=[...defaultState], action) => {
       return state;
 
     case ACTION.ADD_STATS:
-      const { focusTime, date, currentTask, timestamp } = action.payload;
-      currentTask.stats.totalMinutes += focusTime;
-      if (!currentTask.stats[date]) {
-        currentTask.stats[date] = [];
+      if (action.payload.success) {
+        return [...state.slice(0, -1), action.payload.currentTask ];
       }
-      currentTask.stats[date].push({ timestamp, focusTime });
-      return [ ...state.slice(0, -1), currentTask ];
+      return state;
 
     default:
       return state;

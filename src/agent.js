@@ -1,4 +1,5 @@
 import superagent from 'superagent';
+import { request } from 'http';
 
 const API_ROOT = 'http://localhost:4000/api';
 
@@ -26,6 +27,8 @@ const requests = {
 };
 
 const Auth = {
+  current: () => requests.get('/user'),
+
   register: (email, password) => 
     requests.post('/user', { user: { email, password } }),
 
@@ -33,7 +36,22 @@ const Auth = {
     requests.post('/user/login', { user: { email, password }})
 }
 
+const Settings = {
+  current: () => requests.get('/settings'),
+  set: settings => requests.put('/settings', { settings })
+}
+
+const Tasks = {
+  all: () => requests.get('/tasks/all'),
+  addNewTask: task => requests.post('/tasks', { task }),
+  setCurrentTasks: (_id, lastUpdated) => requests.put('/tasks', { task: {_id, lastUpdated} }),
+  addStats: payload => 
+    requests.put('/tasks', { task: payload })
+}
+
 export default {
   Auth,
+  Settings,
+  Tasks,
   setToken: _token => { token = _token; }
 }

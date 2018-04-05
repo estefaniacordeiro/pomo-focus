@@ -79,7 +79,7 @@ router.put('/', auth.required, (req, res, next) => {
     user.tasks.push(currentTask);
 
     user.save().then( () => {
-      res.json({ success: true });
+      res.json({ success: true, currentTask });
     }).catch(next);
   }).catch(next);
 })
