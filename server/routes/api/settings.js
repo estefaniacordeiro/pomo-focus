@@ -22,7 +22,7 @@ router.put('/', auth.required, (req, res, next) => {
     const newSettings = req.body.settings;
     user.settings = newSettings;
     user.save().then( () => {
-      return res.sendStatus(204);
+      return res.json({settings: newSettings});
     }).catch(next);
   }).catch(next);
 })
