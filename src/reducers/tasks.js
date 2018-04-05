@@ -17,8 +17,8 @@ export default (state=[...defaultState], action) => {
       return state;
 
     case ACTION.ADD_STATS:
-      if (action.payload.success) {
-        return [...state.slice(0, -1), action.payload.currentTask ];
+      if (action.payload[0].success) {
+        return [...state.slice(0, -1), action.payload[0].currentTask ];
       }
       return state;
 
