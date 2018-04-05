@@ -16,13 +16,14 @@ import { Popover } from 'antd';
 
 const mapStateToProps = state => ({
   settingsOpen: state.settings.modalOpen,
-  redirectTo: state.common.redirectTo
+  redirectTo: state.common.redirectTo,
+  appLoaded: state.common.appLoaded
 })
 
 const mapDispatchToProps = dispatch => ({
   closeSettings: () => dispatch({ type: ACTION.CLOSE_SETTINGS, payload: { modalOpen: false}}),
   onRedirect: () => dispatch({ type: ACTION.REDIRECT }),
-  onLoad: () => dispatch({ type: ACTION.APP_LOAD, payload: agent.Auth.current()})
+  onLoad: () => dispatch({ type: ACTION.APP_LOAD, payload: agent.Auth.current()}),
 })
 
 
