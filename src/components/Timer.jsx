@@ -24,7 +24,7 @@ const mapDispatchToProps = dispatch => ({
   setTimer: (payload) => dispatch({type: ACTION.SET_TIMER, payload}),
   setMode: payload => dispatch({type: ACTION.SET_MODE, payload}),
   setSessionNum: payload => dispatch({type: ACTION.SET_SESSION_NUMBER, payload}),
-  addStats: payload => dispatch({type: ACTION.ADD_STATS, payload}),
+  addStats: payload => dispatch({type: ACTION.ADD_STATS, payload: agent.Tasks.addStats(payload), stats: payload}),
   getSettings: () => dispatch({type: ACTION.GET_SETTINGS, payload: agent.Settings.current() }),
 })
 
@@ -37,6 +37,7 @@ class Timer extends React.Component {
       hoveredOnTimer: false
     }
     this.timer = null;
+    this.lastTimer = 0;
   }
 
   componentWillMount() {
@@ -75,6 +76,7 @@ class Timer extends React.Component {
 
   startTimer() {
     let { totalSec } = this.state;
+    this.lastTimer = totalSec / 60;
     this.props.startTimer();
     totalSec--;
     this.timer = setInterval( () => {
@@ -91,10 +93,10 @@ class Timer extends React.Component {
 
   timerEnded() {
     this.props.endTimer();
-    const { min, mode, currentSession, sessionsGoal, focusTime, shortBreak, longBreak, tasks  } = this.props;
+    const { mode, currentSession, sessionsGoal, focusTime, shortBreak, longBreak, tasks  } = this.props;
     let nextCountDown, nextMode, nextSessionNum;
     if (mode === 'focus') {
-      this.addStats(min, Date.now(), tasks.slice(-1)[0]);
+      this.addStats(this.lastTimer, Date.now(), tasks.slice(-1)[0]);
       if (currentSession === sessionsGoal - 1) {
         nextMode = 'long-break';
       } else {
@@ -137,13 +139,10 @@ class Timer extends React.Component {
     }
   }
 
-  addStats(focusTime, timestamp, currentTask) {
+  addStats(focusTime, endedAt, currentTask) {
     const { addStats } = this.props;
-    const date = moment(timestamp).format("MMDDYYYY");
-    addStats({ date, focusTime, currentTask, timestamp });
-    // currentTask.stats.totalMinutes += focusTime;
-
-
+    const date = moment(endedAt).format("MMDDYYYY");
+    addStats({_id: currentTask._id, focusTime, endedAt, date});
   }
 
 
