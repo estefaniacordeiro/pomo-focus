@@ -1,22 +1,33 @@
-import T from '../constants';
+import ACTION from '../constants';
 
 const defaultValues = {
-  focusTime: 0.2,
-  shortBreak: 0.1,
-  longBreak: 1,
-  totalSessions: 2,
+  focusTime: 25,
+  shortBreak: 5,
+  longBreak: 15,
+  totalSessions: 4,
   modalOpen: false,
 }
 
 export default (state = { ...defaultValues }, action) => {
   switch(action.type) {
-    case T.SUBMIT_SETTINGS:
-    case T.OPEN_SETTINGS:
-    case T.CLOSE_SETTINGS:
+    case ACTION.SUBMIT_SETTINGS:
+      return ({
+        ...state,
+        ...action.payload.settings
+      })
+    case ACTION.OPEN_SETTINGS:
+    case ACTION.CLOSE_SETTINGS:
       return ({
         ...state,
         ...action.payload
       })
+
+    case ACTION.GET_SETTINGS:
+      return ({
+        ...state,
+        ...action.payload.settings
+      })
+    
     
     default: 
       return state;
