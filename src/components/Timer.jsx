@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import T from '../constants';
+import ACTION from '../constants';
+import agent from '../agent';
 import '../css/Timer.css';
 
 
@@ -14,16 +15,17 @@ const mapStateToProps = state => ({
   focusTime: state.settings.focusTime,
   shortBreak: state.settings.shortBreak,
   longBreak: state.settings.longBreak,
-  tasks: state.tasks
+  tasks: state.tasks,
 });
 
 const mapDispatchToProps = dispatch => ({
-  startTimer: () => dispatch({type: T.SET_TICKING, payload: true}),
-  endTimer: () => dispatch({type: T.SET_TICKING, payload: false}),
-  setTimer: (payload) => dispatch({type: T.SET_TIMER, payload}),
-  setMode: payload => dispatch({type: T.SET_MODE, payload}),
-  setSessionNum: payload => dispatch({type: T.SET_SESSION_NUMBER, payload}),
-  addStats: payload => dispatch({type: T.ADD_STATS, payload}),
+  startTimer: () => dispatch({type: ACTION.SET_TICKING, payload: true}),
+  endTimer: () => dispatch({type: ACTION.SET_TICKING, payload: false}),
+  setTimer: (payload) => dispatch({type: ACTION.SET_TIMER, payload}),
+  setMode: payload => dispatch({type: ACTION.SET_MODE, payload}),
+  setSessionNum: payload => dispatch({type: ACTION.SET_SESSION_NUMBER, payload}),
+  addStats: payload => dispatch({type: ACTION.ADD_STATS, payload}),
+  getSettings: () => dispatch({type: ACTION.GET_SETTINGS, payload: agent.Settings.current() }),
 })
 
 class Timer extends React.Component {
@@ -31,15 +33,40 @@ class Timer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      totalSec: props.min * 60,
+      totalSec: 0,
       hoveredOnTimer: false
     }
     this.timer = null;
   }
 
+  componentWillMount() {
+    this.props.getSettings();
+  }
+
   componentWillReceiveProps(nextProps) {
-    const { min } = nextProps;
-    console.log(" Will receive props" ,{ min });
+    const { focusTime, shortBreak, longBreak, mode, timer, ticking } = nextProps;
+    if (!ticking) {
+      this.setTimer({mode, shortBreak, longBreak, focusTime});
+    }
+  }
+
+  setTimer(params = this.props) {
+    const { mode, shortBreak, longBreak, focusTime } = params;
+    let min;
+    switch(mode) {
+      case 'focus':
+        min = focusTime;
+        break;
+      case 'short-break':
+        min = shortBreak;
+        break;
+      case 'long-break':
+        min = longBreak;
+        break;
+      default:
+        min = 0;
+        break;
+    }
     
     this.setState({
       totalSec: min * 60
@@ -69,28 +96,23 @@ class Timer extends React.Component {
     if (mode === 'focus') {
       this.addStats(min, Date.now(), tasks.slice(-1)[0]);
       if (currentSession === sessionsGoal - 1) {
-        nextCountDown = longBreak;
         nextMode = 'long-break';
       } else {
-        nextCountDown = shortBreak;
         nextMode = 'short-break';
       }
       nextSessionNum = currentSession;
     } else if (mode === 'short-break') {
-      nextCountDown = focusTime;
       nextMode = 'focus';
       nextSessionNum = currentSession + 1;
     } else if (mode === 'long-break') {
-      nextCountDown = focusTime;
       nextMode = 'focus';
       nextSessionNum = 0;
     }
-    this.resetTimer(nextCountDown, nextMode, nextSessionNum);
+    this.resetTimer(nextMode, nextSessionNum);
   }
 
-  resetTimer(countDown, mode, sessionNum) {
-    const { setTimer, setMode, setSessionNum  } = this.props;
-    setTimer(countDown);
+  resetTimer( mode, sessionNum) {
+    const { setMode, setSessionNum  } = this.props;
     setMode(mode);
     setSessionNum(sessionNum);
   }
@@ -99,7 +121,7 @@ class Timer extends React.Component {
     clearInterval(this.timer);
     this.timer = null;
     this.props.endTimer();
-    this.setState({ totalSec: this.props.min * 60 }); 
+    this.setTimer()
   }
 
   clickTimer() {

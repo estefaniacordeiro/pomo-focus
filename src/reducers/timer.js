@@ -1,27 +1,27 @@
-import T from '../constants';
+import ACTION from '../constants';
 
-const min = 0.2, mode = 'focus', currentSession = 0, ticking = false;
+const defaultValues = {
+  mode: 'focus',
+  currentSession: 0,
+  ticking: false,
+  loaded: false
+}
 
-const timer = (state = { min, mode, currentSession, ticking }, action) => {
+const timer = (state = defaultValues, action) => {
   switch(action.type) {
-    case T.SET_TIMER: 
-      return {
-        ...state,
-        min: action.payload
-      }
-    case T.SET_MODE:
+    case ACTION.SET_MODE:
       return {
         ...state,
         mode: action.payload,
       };
     
-    case T.SET_TICKING: 
+    case ACTION.SET_TICKING: 
       return {
         ...state,
         ticking: action.payload
       }
 
-    case T.SET_SESSION_NUMBER:
+    case ACTION.SET_SESSION_NUMBER:
       return {
         ...state,
         currentSession: action.payload
