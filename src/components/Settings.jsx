@@ -2,17 +2,18 @@ import React from 'react';
 import { Modal, TimePicker, InputNumber, Alert } from 'antd';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import T from '../constants';
+import ACTION from '../constants';
+import agent from '../agent';
 import '../css/Settings.css';
 
 const mapStateToProps = state => ({
   ...state.timer,
-  ...state.settings,
+  ...state.settings
 })
 
 const mapDispatchToProps = dispatch => ({
-  submitSettings: settings => dispatch({type: T.SUBMIT_SETTINGS, payload: settings}),
-  setTimer: time => dispatch({ type: T.SET_TIMER, payload: time})
+  submitSettings: settings => 
+    dispatch({type: ACTION.SUBMIT_SETTINGS, payload: agent.Settings.set(settings)}),  
 })
 
 class Settings extends React.Component {
@@ -32,7 +33,12 @@ class Settings extends React.Component {
 
 
   componentWillReceiveProps(nextProps) {
+    const { focusTime, shortBreak, longBreak, totalSessions } = nextProps;
     this.setState({
+      focusTime,
+      shortBreak,
+      longBreak,
+      totalSessions,
       visible: nextProps.visible
     })
   }
@@ -58,18 +64,9 @@ class Settings extends React.Component {
   }
 
   onSubmit = () => {
-    const { close, submitSettings, mode, ticking, setTimer } = this.props;
+    const { close, submitSettings, mode, ticking } = this.props;
     const { focusTime, shortBreak, longBreak, totalSessions } = this.state;
     submitSettings({ focusTime, shortBreak, longBreak, totalSessions });
-    if (!ticking) {
-      if (mode === 'focus') {
-        setTimer(focusTime);
-      } else if (mode==='short-break') {
-        setTimer(shortBreak);
-      } else if (mode === 'long-break') {
-        setTimer(longBreak);
-      }
-    }
     close();
   }
 
