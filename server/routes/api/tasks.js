@@ -24,8 +24,8 @@ router.post('/', auth.required, (req, res, next) => {
     }
 
     const { name, lastUpdated } = req.body.task;
-    if (!name || !lastUpdated || !stats) {
-      return res.sendStatus(400);
+    if (!name || !lastUpdated ) {
+      return res.sendStatus(422);
     } else {
       const newTask = { 
         name, 
@@ -35,14 +35,16 @@ router.post('/', auth.required, (req, res, next) => {
         }}
       user.tasks.push(newTask);
       user.save().then( () => {
-        return res.sendStatus(204);
+        return res.json({
+          newTask: user.tasks.slice(-1)[0]
+        });
       }).catch(next);
     }
   }).catch(next);
 })
 
 // Add stats to task
-router.put('/stats', auth.required, (req, res, next) => {
+router.put('/', auth.required, (req, res, next) => {
   User.findById(req.payload.id).then( user => {
     if (!user) {
       return res.sendStatus(401);
@@ -50,22 +52,34 @@ router.put('/stats', auth.required, (req, res, next) => {
 
     const { _id, lastUpdated, focusTime, endedAt, date } = req.body.task;
 
-    if (!_id || !lastUpdated || !focusTime || !endedAt || !date) {
-      return res.sendStatus(400);
+    if (!_id) {
+      return res.sendStatus(422);
     } 
     
     const currentTask = user.tasks.id(_id);
-    const stats = currentTask.stats;
-    currentTask.lastUpdated = lastUpdated;
-    stats.totalMinutes += focusTime;
-    if (!stats[date]) {
-      stats[date] = [ { endedAt, focusTime } ];
-    } else {
-      stats[date].push({ endedAt, focusTime});
+
+    if (lastUpdated) {
+      currentTask.lastUpdated = lastUpdated;
     }
-    currentTask.markModified('stats');
+    // Add stats
+    if (focusTime && endedAt && date) {
+      const stats = currentTask.stats;
+  
+      stats.totalMinutes += focusTime;
+      if (!stats[date]) {
+        stats[date] = [ { endedAt, focusTime } ];
+      } else {
+        stats[date].push({ endedAt, focusTime});
+      }
+      currentTask.markModified('stats');
+    }
+    // Move the current task to the end of the array
+    const index = user.tasks.indexOf(currentTask);
+    user.tasks.splice(index, 1);
+    user.tasks.push(currentTask);
+
     user.save().then( () => {
-      res.sendStatus(204);
+      res.json({ success: true });
     }).catch(next);
   }).catch(next);
 })
