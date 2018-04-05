@@ -3,12 +3,25 @@ import agent from './agent';
 
 const promiseMiddleware = store => next => action => {
   if (isPromise(action.payload)) {
+    store.dispatch({ type: ACTION.ASYNC_START, subtype: action.type });
+
     action.payload.then( res => {
+      console.log('RESULT:');
+      console.log(res);
+      
+      
       action.payload = res;
+      // if (res.errors) {
+      //   console.dir(res.response.body.message);
+      //   action.error = true;
+      //   action.payload = res.response.body.message;
+      // }
+      // setTimeout( () => store.dispatch(action), 3000 ); // for loading test
       store.dispatch(action);
     }, error => {
+      console.dir(error);
       action.error = true;
-      action.payload = error.response.body;
+      action.payload = error.response.body.errors.message;
       store.dispatch(action);
     });
     return;
