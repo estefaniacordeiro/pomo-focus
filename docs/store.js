@@ -11,7 +11,8 @@ store = {
     focusTime: 25,
     shortBreak: 5,
     longBreak: 15,
-    totalSessions: 4
+    totalSessions: 4,
+    modalOpen: false,
   },
 
   stats: {
@@ -34,7 +35,15 @@ store = {
         ]
       }
     }
-  ]
+  ],
+
+  common: {
+    user: "123@gmail.com",
+    token: "adsfjljl",
+    inProgress: false,
+    redirectTo: null,
+    error: null
+  }
   
 
 
