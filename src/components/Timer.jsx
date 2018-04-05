@@ -24,8 +24,13 @@ const mapDispatchToProps = dispatch => ({
   setTimer: (payload) => dispatch({type: ACTION.SET_TIMER, payload}),
   setMode: payload => dispatch({type: ACTION.SET_MODE, payload}),
   setSessionNum: payload => dispatch({type: ACTION.SET_SESSION_NUMBER, payload}),
-  addStats: payload => dispatch({type: ACTION.ADD_STATS, payload: agent.Tasks.addStats(payload), stats: payload}),
   getSettings: () => dispatch({type: ACTION.GET_SETTINGS, payload: agent.Settings.current() }),
+  addStats: payload => 
+    dispatch({
+      type: ACTION.ADD_STATS, 
+      payload: Promise.all([agent.Tasks.addStats(payload), agent.Stats.addStats(payload)]),   
+      stats: payload
+    }),
 })
 
 class Timer extends React.Component {
@@ -142,7 +147,7 @@ class Timer extends React.Component {
   addStats(focusTime, endedAt, currentTask) {
     const { addStats } = this.props;
     const date = moment(endedAt).format("MMDDYYYY");
-    addStats({_id: currentTask._id, focusTime, endedAt, date});
+    addStats({_id: currentTask._id, focusTime, endedAt, date, task: currentTask.name});
   }
 
 
