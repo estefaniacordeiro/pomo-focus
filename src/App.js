@@ -24,6 +24,7 @@ const mapDispatchToProps = dispatch => ({
   closeSettings: () => dispatch({ type: ACTION.CLOSE_SETTINGS, payload: { modalOpen: false}}),
   onRedirect: () => dispatch({ type: ACTION.REDIRECT }),
   onLoad: () => dispatch({ type: ACTION.APP_LOAD, payload: agent.Auth.current()}),
+  getAllStats: () => dispatch({ type: ACTION.GET_ALL_STATS, payload: agent.Stats.all()})
 })
 
 
@@ -33,6 +34,7 @@ class App extends Component {
     if (token) {
       agent.setToken(token);
       this.props.onLoad();
+      this.props.getAllStats();
     }
   }
 
