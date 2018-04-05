@@ -49,9 +49,15 @@ const Tasks = {
     requests.put('/tasks', { task: payload })
 }
 
+const Stats = {
+  all: () => requests.get('/stats'),
+  addStats: payload => requests.post('/stats', { stats: payload })
+}
+
 export default {
   Auth,
   Settings,
   Tasks,
+  Stats,
   setToken: _token => { token = _token; }
 }

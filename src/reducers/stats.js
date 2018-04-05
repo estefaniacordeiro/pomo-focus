@@ -1,14 +1,18 @@
-import T from '../constants';
+import ACTION from '../constants';
 
 export default (state = {}, action) => {
   switch(action.type) {
-    case T.ADD_STATS:
-      const { focusTime, date, currentTask, timestamp } = action.payload; 
-      if (!state[date]) {
-        state[date] = [];
+    case ACTION.GET_ALL_STATS:
+      return ({
+        ...state,
+        ...action.payload.stats
+      })
+
+    case ACTION.ADD_STATS:
+      if (action.payload[1].success) {
+        return { ...state, ...action.payload[1].stats};
       }
-      state[date].push({ timestamp, task: currentTask.name, focusTime });
-      return { ...state, [date]: state[date]};
+      return state;
 
     default:
       return state;

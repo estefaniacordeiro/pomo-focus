@@ -25,7 +25,7 @@ router.post('/', auth.required, (req, res, next) => {
     const { date, endedAt, task, focusTime } = req.body.stats;
 
     if ( !date || !endedAt || !task || !focusTime) {
-      return res.sendStatus(400);
+      return res.sendStatus(422);
     }
 
     if (!user.stats[date]) {
@@ -35,7 +35,7 @@ router.post('/', auth.required, (req, res, next) => {
     }
     user.markModified('stats');
     user.save().then( () => {
-      return res.sendStatus(204);
+      return res.json({ success: true, stats: { [date]: user.stats[date]}});
     }).catch(next);
   }).catch(next);
 })
