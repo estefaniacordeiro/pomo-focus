@@ -64,7 +64,8 @@ router.put('/', auth.required, (req, res, next) => {
     // Add stats
     if (focusTime && endedAt && date) {
       const stats = currentTask.stats;
-  
+      
+      currentTask.lastUpdated = endedAt;
       stats.totalMinutes += focusTime;
       if (!stats[date]) {
         stats[date] = [ { endedAt, focusTime } ];
