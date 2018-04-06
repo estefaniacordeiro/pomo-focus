@@ -14,6 +14,9 @@ export default (state = {}, action) => {
       }
       return state;
 
+    case ACTION.LOGOUT:
+      return {};
+
     default:
       return state;
   }

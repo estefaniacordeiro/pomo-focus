@@ -27,6 +27,11 @@ export default (state = { ...defaultValues }, action) => {
         ...state,
         ...action.payload.settings
       })
+
+    case ACTION.LOGOUT:
+      return ({
+        ...defaultValues
+      })
     
     
     default: 

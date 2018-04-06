@@ -1,8 +1,6 @@
 import ACTION from '../constants';
 
-const defaultState = [];
-
-export default (state=[...defaultState], action) => {
+export default (state=[], action) => {
   switch(action.type) {
     case ACTION.GET_ALL_TASKS:
       return [ ...action.payload.tasks ];
@@ -21,6 +19,9 @@ export default (state=[...defaultState], action) => {
         return [...state.slice(0, -1), action.payload[0].currentTask ];
       }
       return state;
+
+    case ACTION.LOGOUT:
+      return [];
 
     default:
       return state;
