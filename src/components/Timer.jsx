@@ -24,7 +24,6 @@ const mapDispatchToProps = dispatch => ({
   setTimer: (payload) => dispatch({type: ACTION.SET_TIMER, payload}),
   setMode: payload => dispatch({type: ACTION.SET_MODE, payload}),
   setSessionNum: payload => dispatch({type: ACTION.SET_SESSION_NUMBER, payload}),
-  getSettings: () => dispatch({type: ACTION.GET_SETTINGS, payload: agent.Settings.current() }),
   addStats: payload => 
     dispatch({
       type: ACTION.ADD_STATS, 
@@ -38,15 +37,11 @@ class Timer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      totalSec: 0,
+      totalSec: props.focusTime * 60,
       hoveredOnTimer: false
     }
     this.timer = null;
     this.lastTimer = 0;
-  }
-
-  componentWillMount() {
-    this.props.getSettings();
   }
 
   componentWillReceiveProps(nextProps) {
