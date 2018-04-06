@@ -31,7 +31,7 @@ router.post('/', auth.required, (req, res, next) => {
     if (!user.stats[date]) {
       user.stats[date] = [{ endedAt, task, focusTime }];
     } else {
-      user.stats.push({ endedAt, task, focusTime });
+      user.stats[date].push({ endedAt, task, focusTime });
     }
     user.markModified('stats');
     user.save().then( () => {
