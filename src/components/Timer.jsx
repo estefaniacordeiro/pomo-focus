@@ -141,8 +141,8 @@ class Timer extends React.Component {
 
   addStats(focusTime, endedAt, currentTask) {
     const { addStats } = this.props;
-    const date = moment(endedAt).format("MMDDYYYY");
-    addStats({_id: currentTask._id, focusTime, endedAt, date, task: currentTask.name});
+    const date = moment(endedAt).format("YYYY-MM-DD");
+    addStats({_id: currentTask._id, focusTime, endedAt, date });
   }
 
 
