@@ -22,16 +22,16 @@ router.post('/', auth.required, (req, res, next) => {
       return res.sendStatus(401);
     }
 
-    const { date, endedAt, task, focusTime } = req.body.stats;
+    const { date, endedAt, focusTime, _id } = req.body.stats;
 
-    if ( !date || !endedAt || !task || !focusTime) {
+    if ( !date || !endedAt || !_id || !focusTime) {
       return res.sendStatus(422);
     }
 
     if (!user.stats[date]) {
-      user.stats[date] = [{ endedAt, task, focusTime }];
+      user.stats[date] = [{ _id, endedAt, focusTime }];
     } else {
-      user.stats[date].push({ endedAt, task, focusTime });
+      user.stats[date].push({ _id, endedAt, focusTime });
     }
     user.markModified('stats');
     user.save().then( () => {
