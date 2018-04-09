@@ -16,7 +16,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch({type: ACTION.SET_CURRENT_TASK, payload: agent.Tasks.setCurrentTasks(id, lastUpdated), tasks})
 })
 
-class Tasks extends React.Component {
+class TaskSelect extends React.Component {
 
   constructor(props) {
     super(props);
@@ -136,4 +136,4 @@ class Tasks extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Tasks);
+export default connect(mapStateToProps, mapDispatchToProps)(TaskSelect);
