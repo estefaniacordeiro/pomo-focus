@@ -15,6 +15,7 @@ const mapStateToProps = state => ({
   focusTime: state.settings.focusTime,
   shortBreak: state.settings.shortBreak,
   longBreak: state.settings.longBreak,
+  sound: state.settings.sound,
   tasks: state.tasks,
 });
 
@@ -93,6 +94,7 @@ class Timer extends React.Component {
 
   timerEnded() {
     this.props.endTimer();
+    this.playAlert();
     const { mode, currentSession, sessionsGoal, focusTime, shortBreak, longBreak, tasks  } = this.props;
     let nextCountDown, nextMode, nextSessionNum;
     if (mode === 'focus') {
@@ -111,6 +113,12 @@ class Timer extends React.Component {
       nextSessionNum = 0;
     }
     this.resetTimer(nextMode, nextSessionNum);
+  }
+
+  playAlert = () => {
+    const { sound } = this.props;
+    const audio = new Audio(`../sound/${sound}.mp3`);
+    audio.play();
   }
 
   resetTimer( mode, sessionNum) {
