@@ -1,18 +1,57 @@
 /* @import '~antd/dist/antd.css'; */
+.App-header-outter-wrapper {
+  display: flex;
+  justify-content: center;
 
+}
 .App-header-wrapper {
   display: flex;
+  flex-basis: 1200px;
+  align-items: baseline;
   justify-content: space-between;
-  align-items: center;
   height: 100px;
   color: black;
+  max-width: 1200px;
+  min-width: 900px;
+  margin: 0 20px;
+  border-left: 2px solid #bccfda;
+  border-right: 2px solid #bccfda;
+  border-bottom: 2px solid #bccfda;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  background: #fff;
 }
 
 .App-header-name {
   font-family: 'Lobster';
   font-size: 70px;
+  flex-basis: 316px;
+
 }
 
+.App-header-version-number {
+  flex-basis: 316px;
+  padding-left: 20px;
+}
+
+.App-header-buttons {
+  flex-basis: 316px;
+  text-align: right;
+  padding-right: 20px;
+/* 
+  right: 5px;
+  bottom: 20px; */
+}
+
+.App-container {
+  text-align: center;
+  border: 2px solid #bccfda;
+  max-width: 1200px;
+  margin: 30px auto;
+  border-radius: 10px;
+  padding: 20px;
+  background: #fff;
+}
 
 
 .nav-button {
@@ -37,6 +76,5 @@
   transform: scale(1.3);
   color: black;
 }
-
 
 
