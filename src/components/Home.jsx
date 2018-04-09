@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Timer from './Timer';
-import Tasks from './Tasks';
+import TaskSelect from './TaskSelect';
 import '../css/Home.css';
 
 class Home extends React.Component {
@@ -9,7 +9,7 @@ class Home extends React.Component {
   render() {
     return (
       <div className="Home-container">
-        <Tasks />
+        <TaskSelect />
         <Timer />
       </div>
     )
