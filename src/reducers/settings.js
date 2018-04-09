@@ -6,6 +6,7 @@ const defaultValues = {
   longBreak: 15,
   totalSessions: 4,
   modalOpen: false,
+  sound: 'definite'
 }
 
 export default (state = { ...defaultValues }, action) => {
