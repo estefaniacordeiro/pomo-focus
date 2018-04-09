@@ -7,6 +7,8 @@ const defaultValues = {
   token: null,
   error: false,
   appLoaded: false,
+  tasksLoaded: false,
+  statsLoaded: false
 }
 
 export default (state={...defaultValues}, action) => {
@@ -59,6 +61,18 @@ export default (state={...defaultValues}, action) => {
         ...action.payload.user,
         inProgress: false,
         redirectTo: '/'
+      })
+
+    case ACTION.GET_ALL_STATS:
+      return ({
+        ...state,
+        statsLoaded: true
+      })
+
+    case ACTION.GET_ALL_TASKS:
+      return ({
+        ...state,
+        tasksLoaded: true
       })
 
     default:
