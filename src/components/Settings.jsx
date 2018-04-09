@@ -1,10 +1,12 @@
 import React from 'react';
-import { Modal, TimePicker, InputNumber, Alert } from 'antd';
+import { Modal, TimePicker, InputNumber, Alert, Select } from 'antd';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import ACTION from '../constants';
 import agent from '../agent';
 import '../css/Settings.css';
+
+const Option = Select.Option;
 
 const mapStateToProps = state => ({
   ...state.timer,
@@ -13,7 +15,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   submitSettings: settings => 
-    dispatch({type: ACTION.SUBMIT_SETTINGS, payload: agent.Settings.set(settings)}),  
+    dispatch({type: ACTION.SUBMIT_SETTINGS, payload: agent.Settings.set(settings)}), 
 })
 
 class Settings extends React.Component {
@@ -27,7 +29,8 @@ class Settings extends React.Component {
       shortBreak,
       longBreak,
       totalSessions,
-      alert: null
+      alert: null,
+      sound: 'definite'
     }
   }
 
@@ -65,10 +68,25 @@ class Settings extends React.Component {
 
   onSubmit = () => {
     const { close, submitSettings, mode, ticking } = this.props;
-    const { focusTime, shortBreak, longBreak, totalSessions } = this.state;
-    submitSettings({ focusTime, shortBreak, longBreak, totalSessions });
+    const { focusTime, shortBreak, longBreak, totalSessions, sound } = this.state;
+    submitSettings({ focusTime, shortBreak, longBreak, totalSessions, sound });
     close();
   }
+
+  handleSoundSelect = sound => {
+    console.log({sound});
+    this.setState({
+      sound
+    })
+  }
+
+  playSound = () => {
+    const { sound } = this.state;
+    const audio = new Audio(`../sound/${sound}.mp3`);
+    audio.play();
+  }
+
+
 
   render() {
     const { openModal, close } = this.props;
@@ -85,40 +103,61 @@ class Settings extends React.Component {
         { alert ? <Alert type="error" message={alert} showIcon /> : null}
         <div className="Settings-item">
           <div className="Settings-item-name">Focus time(min)  </div>
-          <TimePicker 
-            value={moment(focusTime, 'mm')} 
-            format='mm' 
-            size='large' 
-            onChange={this.handleTimeChange('focusTime')} />
+          <div className="Settings-item-content">
+            <TimePicker 
+              value={moment(focusTime, 'mm')} 
+              format='mm' 
+              size='large' 
+              onChange={this.handleTimeChange('focusTime')} />
+          </div>
         </div>
         <div className="Settings-item">
           <div className="Settings-item-name">Short break(min)  </div>
-          <TimePicker 
-            value={moment(shortBreak, 'mm')} 
-            format='mm' 
-            size='large' 
-            onChange={this.handleTimeChange('shortBreak')}
-          />
+          <div className="Settings-item-content">
+            <TimePicker 
+              value={moment(shortBreak, 'mm')} 
+              format='mm' 
+              size='large' 
+              onChange={this.handleTimeChange('shortBreak')}
+            />
+          </div>
         </div>
         <div className="Settings-item">
           <div className="Settings-item-name">Long break(min)  </div>
-          <TimePicker 
-            value={moment(longBreak, 'mm')} 
-            format='mm' 
-            size='large'
-            onChange={this.handleTimeChange('longBreak')} 
-          />
+          <div className="Settings-item-content">
+            <TimePicker 
+              value={moment(longBreak, 'mm')} 
+              format='mm' 
+              size='large'
+              onChange={this.handleTimeChange('longBreak')} 
+            />
+          </div>
         </div>
         <div className="Settings-item">
           <div className="Settings-item-name">Total sessions  </div>
-          <InputNumber 
-            className="Settings-set-sessions" 
-            value={totalSessions} 
-            min={1} 
-            max={8} 
-            onChange={this.handleSessionsChange}
-          />
+          <div className="Settings-item-content">
+            <InputNumber 
+              className="Settings-set-sessions" 
+              value={totalSessions} 
+              min={1} 
+              max={8} 
+              onChange={this.handleSessionsChange}
+            />
+          </div>
         </div>
+        <div className="Settings-item">
+          <div className="Settings-item-name">Alert sound</div>
+          <div className="Settings-item-content">
+            <Select defaultValue='definite' style={{width: 120}} onChange={this.handleSoundSelect} >
+              <Option value='definite'>Definite</Option>
+              <Option value='attention-seeker'>Attention-seeker</Option>
+              <Option value='jingle-bells'>Jingle-bells</Option>
+              <Option value='long-expected'>Long-expected</Option>
+            </Select >
+            <i className="fas fa-play-circle play-sound" onClick={this.playSound} />
+          </div>
+        </div>
+
       </div>
 
       
