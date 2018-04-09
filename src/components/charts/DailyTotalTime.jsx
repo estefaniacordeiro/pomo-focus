@@ -12,45 +12,48 @@ class DailyTotalTime extends React.Component {
     this.totalTimeMap = {};
   }
 
-  componentWillMount() {
-
-
-
-
-  }
-
   componentDidMount() {
     const { stats } = this.props;
+
     this.chart = echarts.init(this.barContainer.current);
-    this.chart.setOption(this.generateOption(stats));
+    if (stats) {
+      this.chart.setOption(this.generateOption(stats));
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { stats } = nextProps;
+
+    if (stats) {
+      this.chart.setOption(this.generateOption(stats));
+    } else {
+      this.chart.clear();
+    }
   }
 
   generateOption(stats) {
     const { tasksIdMap } = this.props;
-
+    const totalTimeMap = {};
     stats.forEach( e => {
-      if (this.totalTimeMap[e._id]) {
-        this.totalTimeMap[e._id] += e.focusTime;
+      if (totalTimeMap[e._id]) {
+        totalTimeMap[e._id] += e.focusTime;
       } else {
-        this.totalTimeMap[e._id] = e.focusTime;
+        totalTimeMap[e._id] = e.focusTime;
       }
     });
     
 
-    const data = Object.keys(this.totalTimeMap).map( id => {
-      return (this.totalTimeMap[id]/60).toFixed(1);
+    const data = Object.keys(totalTimeMap).map( id => {
+      return (totalTimeMap[id]/60).toFixed(1);
     })
 
-    const yAxixData = Object.keys(this.totalTimeMap).map( id => tasksIdMap[id]);
+    const yAxixData = Object.keys(totalTimeMap).map( id => tasksIdMap[id]);
 
     const option = {
-      title: {
-        text: 'Total time focused on each task',
-        left: 'center'
-      },
       legend: {},
       grid: {
-        left: 200
+        left: 200,
+        top: 20,
       },
       xAxis: {
         type: 'value',
@@ -86,11 +89,17 @@ class DailyTotalTime extends React.Component {
   }
 
   render() {
+    const { stats } = this.props;
 
     return(
-      <div>
+      <div className="charts-container">
+        <h3>Time focused on each task</h3>
+        { !!stats ? null : 
+        <div>
+          No data
+        </div> }
         <div
-          className='charts-container daily-total-time'
+          className='daily-total-time'
           style={{ height: '200px', width: '800px' }}
           ref={this.barContainer}
         >

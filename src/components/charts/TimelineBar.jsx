@@ -1,6 +1,7 @@
 import React from 'react';
 import echarts from 'echarts';
 import moment from 'moment';
+import '../../css/charts.css';
 
 function renderItem(params, api) {
   const categoryIndex = api.value(0);
@@ -28,22 +29,18 @@ function renderItem(params, api) {
 }
 
 
-function getOption(data, date, startTime) {
+function getOption(data, date, tasksIdMap) {
+  const taskNames = Object.values(tasksIdMap).map(name => ({name}));
+  console.log(taskNames);
   return ({
     tooltip: {
       formatter: function (params) {
         return params.marker + params.data.name + ': ' + params.value[3] + ' min';
       }
     },
-    title: {
-      text: 'Time consuming distributed',
-      left: 'center'
-    },
-    legend: {
-      data: ['bar', 'error']
-    },
     grid: {
-      height: 100
+      height: 100,
+      top: 20,
     },
     xAxis: {
       min: 'dataMin',
@@ -83,27 +80,32 @@ class TimelineBar extends React.Component {
     this.colorMap = {};
     this.colors = ['#206be5', '#e24446', '#4bed84', '#ffa42d', '#c2e07b'];
     this.tasksCount = 0;
-    this.startTime = 0;
     this.data = null;
-  }
-
-  componentWillMount() {
-    const { stats } = this.props;
-    console.log(stats);
-
-    this.data = this.generateData(stats);
+    this.chart = null;
   }
 
   componentDidMount() {
-    const { date } = this.props;
+    const { date, tasksIdMap, stats } = this.props;
     this.chart = echarts.init(this.barContainer.current);
-    this.chart.setOption(getOption(this.data, date, this.startTime));
+    if (stats) {
+      this.data = this.generateData(stats);
+      this.chart.setOption(getOption(this.data, date, tasksIdMap));
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { date, tasksIdMap, stats } = nextProps; 
+    if (stats) {
+      this.data = this.generateData(stats);
+      this.chart.setOption(getOption(this.data, date, tasksIdMap));
+    } else {
+      this.chart.clear();
+    }
   }
 
   generateData = (stats) => {
     const { tasksIdMap } = this.props;
     const data = [];
-    this.startTime = stats[0].endedAt - stats[0].focusTime * 60 * 1000;
     stats.forEach(e => {
       const block = {};
       block.name = tasksIdMap[e._id];
@@ -136,10 +138,18 @@ class TimelineBar extends React.Component {
   }
 
   render() {
+    const { stats } = this.props;
+
     return (
-      <div>
+      <div className="charts-container">
+        <h3>Focus Time Block</h3>
+        { !!stats ? null : (
+          <div>
+            No data
+          </div>
+        )}
         <div
-          className='timeline-bar'
+          className='timeline-bar-chart'
           style={{ height: '200px', width: '800px' }}
           ref={this.barContainer}
         >
