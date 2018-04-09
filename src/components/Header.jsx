@@ -1,5 +1,5 @@
 import React from 'react';
-import { Popover } from 'antd';
+import { Popover, Tooltip } from 'antd';
 import ACTION from '../constants';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -38,27 +38,34 @@ class Header extends React.Component {
     )
 
     return (
-      <header className="App-header-wrapper">
-        <span className="App-header-version-number">
-          V 0.0.1
-        </span>
-        <Link to='/'>
-          <span className="App-header-name">
-            Pomo timer
+      <div className="App-header-outter-wrapper">
+        <header className="App-header-wrapper">
+          <span className="App-header-version-number">
+            V 0.0.1
           </span>
-        </ Link>
-        <div className="App-header-buttons">
-          <Popover content="Statistics" placement="bottom">
-            <i className="fas fa-chart-pie nav-button" />
-          </ Popover>
-          <Popover content="Settings" placement="bottom">
-            <i className="fas fa-sliders-h nav-button" onClick={this.props.openSettings} />
-          </ Popover>
-          <Popover content={user ? loggedInMenu : unLoggedInMenu } placement="bottomRight">
-            <i className="fas fa-user nav-button" />
-          </ Popover>
-        </div>
-      </header>
+          <Link to='/'>
+            <span className="App-header-name">
+              Pomo timer
+            </span>
+          </ Link>
+          <div className="App-header-buttons">
+            <Tooltip title="Statistics" placement="bottom">
+              <Link to='/stats'>
+                <i className="fas fa-chart-pie nav-button" />
+              </Link>
+            </ Tooltip>
+            <Tooltip title="Tasks" placement="bottom" >
+              <i className="fas fa-tasks nav-button" />
+            </Tooltip >
+            <Tooltip title="Settings" placement="bottom">
+              <i className="fas fa-sliders-h nav-button" onClick={this.props.openSettings} />
+            </ Tooltip>
+            <Popover content={user ? loggedInMenu : unLoggedInMenu } placement="bottomRight">
+              <i className="fas fa-user nav-button" />
+            </ Popover>
+          </div>
+        </header>
+      </div>
     )
   }
 }
