@@ -8,15 +8,7 @@ const promiseMiddleware = store => next => action => {
     action.payload.then( res => {
       console.log('RESULT:');
       console.log(res);
-      
-      
       action.payload = res;
-      // if (res.errors) {
-      //   console.dir(res.response.body.message);
-      //   action.error = true;
-      //   action.payload = res.response.body.message;
-      // }
-      // setTimeout( () => store.dispatch(action), 3000 ); // for loading test
       store.dispatch(action);
     }, error => {
       console.dir(error);
