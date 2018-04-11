@@ -7,7 +7,7 @@ import '../css/Timer.css';
 
 
 const mapStateToProps = state => ({
-  min: state.timer.min,
+  seconds: state.timer.seconds,
   mode: state.timer.mode,
   ticking: state.timer.ticking,
   currentSession: state.timer.currentSession,
@@ -17,12 +17,15 @@ const mapStateToProps = state => ({
   longBreak: state.settings.longBreak,
   sound: state.settings.sound,
   tasks: state.tasks,
+  minutesThisRound: state.timer.minutesThisRound,
+  instance: state.timer.instance
 });
 
 const mapDispatchToProps = dispatch => ({
-  startTimer: () => dispatch({type: ACTION.SET_TICKING, payload: true}),
-  endTimer: () => dispatch({type: ACTION.SET_TICKING, payload: false}),
+  startTimer: payload => dispatch({type: ACTION.START_TIMER, payload}),
+  endTimer: payload => dispatch({type: ACTION.END_TIMER, payload}),
   setTimer: (payload) => dispatch({type: ACTION.SET_TIMER, payload}),
+  countDown: payload => dispatch({type: ACTION.COUNT_DOWN, payload }),
   setMode: payload => dispatch({type: ACTION.SET_MODE, payload}),
   setSessionNum: payload => dispatch({type: ACTION.SET_SESSION_NUMBER, payload}),
   addStats: payload => 
@@ -38,11 +41,17 @@ class Timer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      totalSec: props.focusTime * 60,
+      // totalSec: props.focusTime * 60,
       hoveredOnTimer: false
     }
     this.timer = null;
     this.lastTimer = 0;
+    this.setTimer();
+  }
+
+  componentWillUnmount() {
+    console.log('Timer unmounted.');
+    
   }
 
   componentWillReceiveProps(nextProps) {
@@ -53,7 +62,8 @@ class Timer extends React.Component {
   }
 
   setTimer(params = this.props) {
-    const { mode, shortBreak, longBreak, focusTime } = params;
+    const { mode, shortBreak, longBreak, focusTime, ticking } = params;
+    if (ticking) return;
     let min;
     switch(mode) {
       case 'focus':
@@ -70,35 +80,32 @@ class Timer extends React.Component {
         break;
     }
     
-    this.setState({
-      totalSec: min * 60
-    });
+    this.props.setTimer({seconds: min * 60});
   }
 
   startTimer() {
-    let { totalSec } = this.state;
-    this.lastTimer = totalSec / 60;
-    this.props.startTimer();
-    totalSec--;
-    this.timer = setInterval( () => {
-      this.setState({
-        totalSec
-      });
-      if (--totalSec < 0) {
-        clearInterval(this.timer);
-        this.timer = null;
+    let { seconds } = this.props;
+    this.props.setTimer({minutesThisRound: seconds/60 });
+
+    seconds--;
+    const instance = setInterval( () => {
+      this.props.countDown({ seconds });
+      if (--seconds < 0) {
+        clearInterval(instance);
         this.timerEnded();
       }
     }, 1000);
+    this.props.startTimer({ticking: true, instance});
   }
 
   timerEnded() {
-    this.props.endTimer();
+    this.props.endTimer({ticking: false, instance: null});
     this.playAlert();
-    const { mode, currentSession, sessionsGoal, focusTime, shortBreak, longBreak, tasks  } = this.props;
+    this.popNotification();
+    const { mode, currentSession, sessionsGoal, focusTime, shortBreak, longBreak, tasks, minutesThisRound  } = this.props;
     let nextCountDown, nextMode, nextSessionNum;
     if (mode === 'focus') {
-      this.addStats(this.lastTimer, Date.now(), tasks.slice(-1)[0]);
+      this.addStats(minutesThisRound, Date.now(), tasks.slice(-1)[0]);
       if (currentSession === sessionsGoal - 1) {
         nextMode = 'long-break';
       } else {
@@ -121,6 +128,13 @@ class Timer extends React.Component {
     audio.play();
   }
 
+  popNotification = () => {
+    if (Notification.permission === 'granted') {
+      const noti = new Notification('Times up');
+      setTimeout( () => noti.close(), 3000);
+    }
+  }
+
   resetTimer( mode, sessionNum) {
     const { setMode, setSessionNum  } = this.props;
     setMode(mode);
@@ -128,9 +142,9 @@ class Timer extends React.Component {
   }
 
   interrupt() {
-    clearInterval(this.timer);
-    this.timer = null;
-    this.props.endTimer();
+    const { instance, clearInstance, endTimer } = this.props;
+    clearInterval(instance);
+    endTimer({ticking: false, instance: null});
     this.setTimer()
   }
 
@@ -156,9 +170,9 @@ class Timer extends React.Component {
 
   render() {
     const { totalSec, hoveredOnTimer } = this.state;
-    const { mode, currentSession, totalSessions, ticking } = this.props;
-    const min = parseInt(totalSec / 60),
-          sec = parseInt(totalSec % 60);
+    const { seconds, mode, currentSession, totalSessions, ticking } = this.props;
+    const min = parseInt(seconds / 60),
+          sec = parseInt(seconds % 60);
     let timerDisplay;
 
     if (hoveredOnTimer) {
