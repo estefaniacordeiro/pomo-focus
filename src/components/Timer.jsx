@@ -99,12 +99,12 @@ class Timer extends React.Component {
   }
 
   timerEnded() {
+    const { mode, currentSession, sessionsGoal, focusTime, shortBreak, longBreak, tasks, minutesThisRound  } = this.props;
     this.props.endTimer({ticking: false, instance: null});
     this.playAlert();
-    this.popNotification();
-    const { mode, currentSession, sessionsGoal, focusTime, shortBreak, longBreak, tasks, minutesThisRound  } = this.props;
     let nextCountDown, nextMode, nextSessionNum;
     if (mode === 'focus') {
+      this.popNotification('Focus');
       this.addStats(minutesThisRound, Date.now(), tasks.slice(-1)[0]);
       if (currentSession === sessionsGoal - 1) {
         nextMode = 'long-break';
@@ -113,9 +113,11 @@ class Timer extends React.Component {
       }
       nextSessionNum = currentSession;
     } else if (mode === 'short-break') {
+      this.popNotification('Break');
       nextMode = 'focus';
       nextSessionNum = currentSession + 1;
     } else if (mode === 'long-break') {
+      this.popNotification('Break');
       nextMode = 'focus';
       nextSessionNum = 0;
     }
@@ -128,11 +130,16 @@ class Timer extends React.Component {
     audio.play();
   }
 
-  popNotification = () => {
-    if (Notification.permission === 'granted') {
-      const noti = new Notification('Times up');
-      setTimeout( () => noti.close(), 3000);
+  popNotification = (mode) => {
+    if (Notification.permission !== 'granted') {
+      return;
     }
+    
+    const noti = new Notification(`${mode} finished. Click to start ${mode === 'Focus' ? 'break' : 'focus'}`);
+    noti.addEventListener('click', () => {
+      this.startTimer();
+    })
+    setTimeout( () => noti.close(), 5000);
   }
 
   resetTimer( mode, sessionNum) {

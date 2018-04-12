@@ -45,6 +45,12 @@ class App extends Component {
     }
   }
 
+  componentDidMount() {
+    Notification.requestPermission().then( res => {
+      console.log(res);
+    })
+  }
+
   componentWillReceiveProps(nextProps) {
     if(nextProps.redirectTo) {
       console.log('Redirected');
