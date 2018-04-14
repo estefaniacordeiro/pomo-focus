@@ -108,7 +108,8 @@ class TimelineBar extends React.Component {
     const data = [];
     stats.forEach(e => {
       const block = {};
-      block.name = tasksIdMap[e._id];
+      // If the task have been deleted, then you can't get the name by id anymore, so use the name pre-stored in stats then.
+      block.name = tasksIdMap[e._id] ? tasksIdMap[e._id] : e.name;
       block.value = this.getTimePeriod(e);
       block.itemStyle = this.getItemStyle(e);
       data.push(block);

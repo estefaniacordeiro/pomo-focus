@@ -35,19 +35,21 @@ class DailyTotalTime extends React.Component {
     const { tasksIdMap } = this.props;
     const totalTimeMap = {};
     stats.forEach( e => {
-      if (totalTimeMap[e._id]) {
-        totalTimeMap[e._id] += e.focusTime;
+      // If the task have been deleted, then you can't get the name by id anymore, so use the name pre-stored in stats then.
+      const name = tasksIdMap[e._id] ? tasksIdMap[e._id] : e.name;
+      if (totalTimeMap[name]) {
+        totalTimeMap[name] += e.focusTime;
       } else {
-        totalTimeMap[e._id] = e.focusTime;
+        totalTimeMap[name] = e.focusTime;
       }
     });
     
 
-    const data = Object.keys(totalTimeMap).map( id => {
-      return (totalTimeMap[id]/60).toFixed(1);
+    const data = Object.keys(totalTimeMap).map( name => {
+      return (totalTimeMap[name]/60).toFixed(1);
     })
 
-    const yAxixData = Object.keys(totalTimeMap).map( id => tasksIdMap[id]);
+    const yAxixData = Object.keys(totalTimeMap);
 
     const option = {
       legend: {},
