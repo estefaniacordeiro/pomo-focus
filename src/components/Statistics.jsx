@@ -47,10 +47,23 @@ class Statistics extends React.Component {
     }
   }
 
+  handleDateBackOrForth = direction => {
+    const { date } = this.state;
+    if (direction === 'back') {
+      this.setState({
+        date: moment(date).subtract(1, 'd').format('YYYY-MM-DD')
+      })
+    } else {
+      this.setState({
+        date: moment(date).add(1, 'd').format('YYYY-MM-DD')
+      })
+    }
+  }
+
   render() {
     const { stats, appLoaded, tasks, statsLoaded, tasksLoaded } = this.props;
     const { date } = this.state;
-    
+    const dateForDatePick = moment(date);
     console.log(stats);
     console.log(date);
     
@@ -58,8 +71,10 @@ class Statistics extends React.Component {
 
     return (
       <div className="Stats-container">
-        <div className="Stats-date-picker">
-          <DatePicker defaultValue={moment()} format='YYYY-MM-DD' onChange={this.handleDateChange} />
+        <div className="Stats-date-picker-wrapper">
+          <i className="fas fa-angle-left Stats-arrow" onClick={ () => this.handleDateBackOrForth('back')} />
+          <DatePicker className="Stats-date-picker" value={dateForDatePick} format='YYYY-MM-DD' onChange={this.handleDateChange} />
+          <i className="fas fa-angle-right Stats-arrow" onClick={() => this.handleDateBackOrForth('forth')} />
         </div>
         { statsLoaded && tasksLoaded ? (
           <div>
