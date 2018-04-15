@@ -2,6 +2,15 @@
 
 }
 
-.Stats-date-picker {
+.Stats-date-picker-wrapper {
   margin: 20px;
+}
+
+.Stats-date-picker {
+  margin: 0 20px;
+}
+
+.Stats-arrow:hover {
+  cursor: pointer;
+  color: #40a9ff;
 }
