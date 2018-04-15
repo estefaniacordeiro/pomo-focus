@@ -3,7 +3,7 @@ const router = require('express').Router();
 const User = mongoose.model('User');
 const auth = require('../auth');
 
-router.get('/', auth.required, (req, res, next) => {
+router.get('/all', auth.required, (req, res, next) => {
   User.findById(req.payload.id).then( user => {
     if (!user) {
       return res.sendStatus(401);
@@ -15,6 +15,18 @@ router.get('/', auth.required, (req, res, next) => {
   }).catch(next);
 })
 
+router.get('/', auth.required, (req, res, next) => {
+  User.findById(req.payload.id).then( user => {
+    if (!user) {
+      return res.sendStatus(401);
+    }
+
+    const date = req.query.date;
+    const stats = user.stats[date];
+    return res.json({stats})
+  }).catch(next);
+})
+
 // Add a completed task to stats
 router.post('/', auth.required, (req, res, next) => {
   User.findById(req.payload.id).then( user => {
@@ -22,16 +34,16 @@ router.post('/', auth.required, (req, res, next) => {
       return res.sendStatus(401);
     }
 
-    const { date, endedAt, focusTime, _id } = req.body.stats;
+    const { date, endedAt, focusTime, _id, name } = req.body.stats;
 
     if ( !date || !endedAt || !_id || !focusTime) {
       return res.sendStatus(422);
     }
 
     if (!user.stats[date]) {
-      user.stats[date] = [{ _id, endedAt, focusTime }];
+      user.stats[date] = [{ _id, name, endedAt, focusTime }];
     } else {
-      user.stats[date].push({ _id, endedAt, focusTime });
+      user.stats[date].push({ _id, name, endedAt, focusTime });
     }
     user.markModified('stats');
     user.save().then( () => {
