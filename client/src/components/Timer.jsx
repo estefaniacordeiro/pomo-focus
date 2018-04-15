@@ -55,7 +55,7 @@ class Timer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { focusTime, shortBreak, longBreak, mode, timer, ticking } = nextProps;
+    const { focusTime, shortBreak, longBreak, mode, ticking } = nextProps;
     if (!ticking) {
       this.setTimer({mode, shortBreak, longBreak, focusTime});
     }
@@ -99,10 +99,10 @@ class Timer extends React.Component {
   }
 
   timerEnded() {
-    const { mode, currentSession, sessionsGoal, focusTime, shortBreak, longBreak, tasks, minutesThisRound  } = this.props;
+    const { mode, currentSession, sessionsGoal, tasks, minutesThisRound  } = this.props;
     this.props.endTimer({ticking: false, instance: null});
     this.playAlert();
-    let nextCountDown, nextMode, nextSessionNum;
+    let nextMode, nextSessionNum;
     if (mode === 'focus') {
       this.popNotification('Focus');
       this.addStats(minutesThisRound, Date.now(), tasks.slice(-1)[0]);
@@ -149,7 +149,7 @@ class Timer extends React.Component {
   }
 
   interrupt() {
-    const { instance, clearInstance, endTimer } = this.props;
+    const { instance, endTimer } = this.props;
     clearInterval(instance);
     endTimer({ticking: false, instance: null});
     this.setTimer()
@@ -176,7 +176,7 @@ class Timer extends React.Component {
 
 
   render() {
-    const { totalSec, hoveredOnTimer } = this.state;
+    const { hoveredOnTimer } = this.state;
     const { seconds, mode, currentSession, totalSessions, ticking } = this.props;
     const min = parseInt(seconds / 60),
           sec = parseInt(seconds % 60);

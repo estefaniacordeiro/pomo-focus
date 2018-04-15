@@ -5,7 +5,6 @@ const defaultValues = {
   redirectTo: null,
   user: null,
   token: null,
-  error: false,
   appLoaded: false,
   tasksLoaded: false,
   statsLoaded: false,

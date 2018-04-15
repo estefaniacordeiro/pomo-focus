@@ -77,7 +77,7 @@ class Statistics extends React.Component {
   }
 
   render() {
-    const { stats, appLoaded, tasks, statsLoaded, tasksLoaded, statsByDate } = this.props;
+    const { stats, statsLoaded, tasksLoaded, statsByDate } = this.props;
     const { date } = this.state;
     const dateForDatePick = moment(date);
     console.log(stats);

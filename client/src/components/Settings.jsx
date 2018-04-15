@@ -78,7 +78,7 @@ class Settings extends React.Component {
   }
 
   onSubmit = () => {
-    const { close, submitSettings, mode, ticking } = this.props;
+    const { close, submitSettings } = this.props;
     const { focusTime, shortBreak, longBreak, totalSessions, sound } = this.state;
     submitSettings({ focusTime, shortBreak, longBreak, totalSessions, sound });
     close();
@@ -100,7 +100,7 @@ class Settings extends React.Component {
 
 
   render() {
-    const { openModal, close } = this.props;
+    const { close } = this.props;
     const { focusTime, shortBreak, longBreak, totalSessions, alert } = this.state;
 
     return (

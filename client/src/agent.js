@@ -1,5 +1,4 @@
 import superagent from 'superagent';
-import { request } from 'http';
 
 const API_ROOT = '/api';
 

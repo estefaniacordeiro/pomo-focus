@@ -1,6 +1,6 @@
 import React from 'react';
 import LoadingIcon from './LoadingIcon';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Button } from 'antd';
 import { connect } from 'react-redux';
 import ACTION from '../constants';
 import agent from '../agent';

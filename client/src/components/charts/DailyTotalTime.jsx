@@ -1,6 +1,5 @@
 import React from 'react';
 import echarts from 'echarts';
-import moment from 'moment';
 
 class DailyTotalTime extends React.Component {
 

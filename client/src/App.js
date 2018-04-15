@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import logo from './logo.svg';
 import './App.css';
 import { Route, Switch } from 'react-router-dom';
 import ACTION from './constants';
@@ -18,7 +17,7 @@ import agent from './agent';
 import TestTest from './components/TestTest';
 
 
-import { Popover, Alert } from 'antd';
+import { Alert } from 'antd';
 
 const mapStateToProps = state => ({
   settingsOpen: state.settings.modalOpen,

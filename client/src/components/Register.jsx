@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Button, Alert } from 'antd';
+import { Form, Input, Button } from 'antd';
 import ACTION from '../constants';
 import agent from '../agent';
 import { connect } from 'react-redux';
@@ -63,7 +63,7 @@ class RegistrationForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { inProgress, error, clearError, form } = this.props;
+    const { inProgress, error, clearError } = this.props;
 
     if (error) {
       setTimeout( () => clearError(), 3000 );
