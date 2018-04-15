@@ -53,7 +53,7 @@ app.use( (req, res, next) => {
 
 // development error handler
 // will print stacktrace
-if (!isProduction) {
+// if (!isProduction) {
   app.use( (err, req, res, next) => {
     console.log(err.stack);
     res.status(err.status || 500);
@@ -64,7 +64,7 @@ if (!isProduction) {
       }
     });
   });
-}
+// }
 
 // production error handler
 // no stack traces leaked to user
