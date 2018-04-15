@@ -13,8 +13,8 @@ const tokenPlugin = req => {
 }
 
 const requests = {
-  del: url =>
-    superagent.del(`${API_ROOT}${url}`).use(tokenPlugin).then(responseBody),
+  del: (url, body) =>
+    superagent.del(`${API_ROOT}${url}`, body).use(tokenPlugin).then(responseBody),
   
   get: url =>
     superagent.get(`${API_ROOT}${url}`).use(tokenPlugin).then(responseBody),
@@ -46,12 +46,24 @@ const Tasks = {
   addNewTask: task => requests.post('/tasks', { task }),
   setCurrentTasks: (_id, lastUpdated) => requests.put('/tasks', { task: {_id, lastUpdated} }),
   addStats: payload => 
-    requests.put('/tasks', { task: payload })
+    requests.put('/tasks', { task: payload }),
+  changeName: payload => requests.put('/tasks/name', { task: payload}),
+  delete: payload => requests.del('/tasks', { task: payload })
 }
 
 const Stats = {
   all: () => requests.get('/stats'),
-  addStats: payload => requests.post('/stats', { stats: payload })
+  addStats: payload => requests.post('/stats', { stats: payload }),
+  // Here is an example of using fetch
+  getStatsByDate: date => 
+    fetch(`${API_ROOT}/stats/?date=${date}`, { 
+      method: 'GET',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        Authorization: `Token ${token}`
+      })
+    }).then( res => res.json())
+  // requests.get(`/stats/?date=${date}`)
 }
 
 export default {
