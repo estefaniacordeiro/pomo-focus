@@ -23,6 +23,7 @@ class TaskList extends React.Component {
     this.state = {
       inEditId: null,
       nameInput: null,
+      listHeight: window.innerHeight - 200
     }
     this.input = null;
   }
@@ -33,6 +34,20 @@ class TaskList extends React.Component {
     if (this.props.tasksLoaded && !nextProps.tasksLoaded ) {
       this.props.getAllTasks();
     }
+  }
+
+  componentDidMount() {
+    window.addEventListener('resize', this.resizeList );
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.resizeList);
+  }
+
+  resizeList = () => {
+    this.setState({
+      listHeight: window.innerHeight - 200
+    })
   }
 
   componentDidUpdate() {
@@ -69,10 +84,10 @@ class TaskList extends React.Component {
 
   render() {
     const { tasks, tasksLoaded } = this.props;
-    const { inEditId, nameInput } = this.state;
+    const { inEditId, nameInput, listHeight } = this.state;
 
     return (
-      <div className="Task-list-wrapper">
+      <div className="Task-list-wrapper" style={{height: listHeight }} >
         <List 
           className="Tasklist"
           loading={!tasksLoaded}
