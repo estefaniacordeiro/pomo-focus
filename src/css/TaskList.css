@@ -1,0 +1,16 @@
+.Task-list-wrapper {
+  width: 500px;
+  margin: 0 auto;
+  border: 1px solid #d9d9d9;
+  border-radius: 5px;
+  padding: 0 20px;
+  overflow: auto;
+}
+
+.Task-list-delete {
+  color: red;
+}
+
+.ant-spin.ant-spin-spinning {
+  left: 0;
+}
