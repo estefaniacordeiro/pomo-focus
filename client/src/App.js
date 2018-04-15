@@ -43,7 +43,7 @@ class App extends Component {
     if (token) {
       agent.setToken(token);
       this.props.onLoad();
-      this.props.getAllStats();
+      // this.props.getAllStats();
       this.props.getSettings();
       this.props.getAllTasks();
     }

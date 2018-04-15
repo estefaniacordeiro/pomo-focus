@@ -1,7 +1,7 @@
 import superagent from 'superagent';
 import { request } from 'http';
 
-const API_ROOT = 'http://localhost:4000/api';
+const API_ROOT = '/api';
 
 const responseBody = res => res.body;
 

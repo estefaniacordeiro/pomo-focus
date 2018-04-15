@@ -29,7 +29,9 @@ if (!isProduction) {
 }
 
 if (isProduction) {
-  mongoose.connect(process.env.MONGODB_URI);
+  // mongoose.connect(process.env.MONGODB_URI);
+  mongoose.connect('mongodb://heroku_hieverest:sdfjkl123@ds227119.mlab.com:27119/heroku_xpklx20c');
+
 } else {
   mongoose.connect('mongodb://localhost/pomotimer');
   mongoose.set('debug', true);

@@ -8,7 +8,8 @@ const defaultValues = {
   error: false,
   appLoaded: false,
   tasksLoaded: false,
-  statsLoaded: false
+  statsLoaded: false,
+  error: null
 }
 
 export default (state={...defaultValues}, action) => {
@@ -17,6 +18,12 @@ export default (state={...defaultValues}, action) => {
       return ({
         ...state,
         inProgress: true
+      })
+
+    case ACTION.ERROR:
+      return ({
+        ...state,
+        error: action.payload
       })
 
     case ACTION.APP_LOAD:
@@ -64,15 +71,31 @@ export default (state={...defaultValues}, action) => {
       })
 
     case ACTION.GET_ALL_STATS:
+    case ACTION.GET_STATS:
       return ({
         ...state,
         statsLoaded: true
       })
 
+    case ACTION.REQUEST_STATS:
+      return ({
+        ...state,
+        statsLoaded: false
+      })
+
     case ACTION.GET_ALL_TASKS:
+      console.log('get-all-tasks COMMON');
+      
       return ({
         ...state,
         tasksLoaded: true
+      })
+
+    case ACTION.CHANGE_TASK_NAME:
+    case ACTION.DELETE_TASK:
+      return ({
+        ...state,
+        tasksLoaded: false
       })
 
     default:

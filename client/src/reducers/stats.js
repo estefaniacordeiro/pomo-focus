@@ -8,6 +8,12 @@ export default (state = {}, action) => {
         ...action.payload.stats
       })
 
+    case ACTION.GET_STATS:
+      return ({
+        ...state,
+        statsByDate: action.payload.stats
+      })
+
     case ACTION.ADD_STATS:
       if (action.payload[1].success) {
         return { ...state, ...action.payload[1].stats};

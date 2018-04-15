@@ -32,6 +32,11 @@ class Settings extends React.Component {
       alert: null,
       sound: 'definite'
     }
+    this.timePickers = {};
+  }
+
+  setRefs = (field, element) => {
+    this.timePickers[field] = element;
   }
 
 
@@ -47,9 +52,15 @@ class Settings extends React.Component {
   }
 
   handleTimeChange = field => moment => {
-    this.setState({
+    moment && this.setState({
       [field]: moment.minutes()
     })
+    if (this.timePickers[field]) {
+      this.timePickers[field].blur();
+      console.log(field + ' blured');
+      console.log(this.timePickers);
+      
+    }
   }
 
   handleSessionsChange = num => {
@@ -108,7 +119,8 @@ class Settings extends React.Component {
               value={moment(focusTime, 'mm')} 
               format='mm' 
               size='large' 
-              onChange={this.handleTimeChange('focusTime')} />
+              onChange={this.handleTimeChange('focusTime')}
+              ref={ e => this.setRefs('focusTime', e)} />
           </div>
         </div>
         <div className="Settings-item">

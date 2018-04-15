@@ -55,7 +55,9 @@ class Header extends React.Component {
               </Link>
             </ Tooltip>
             <Tooltip title="Tasks" placement="bottom" >
-              <i className="fas fa-tasks nav-button" />
+              <Link to='/tasks'>
+                <i className="fas fa-tasks nav-button" />
+              </Link>
             </Tooltip >
             <Tooltip title="Settings" placement="bottom">
               <i className="fas fa-sliders-h nav-button" onClick={this.props.openSettings} />
