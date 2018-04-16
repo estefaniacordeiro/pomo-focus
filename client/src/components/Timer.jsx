@@ -180,27 +180,40 @@ class Timer extends React.Component {
     const { seconds, mode, currentSession, totalSessions, ticking } = this.props;
     const min = parseInt(seconds / 60),
           sec = parseInt(seconds % 60);
-    let timerDisplay;
+    let timerDisplay, timerBorderColor, modeForDisplay;
+    if (mode === 'focus') {
+      modeForDisplay = 'Focus';
+    } else if (mode === 'short-break') {
+      modeForDisplay = 'Short Break';
+    } else {
+      modeForDisplay = 'Long Break';
+    }
 
     if (hoveredOnTimer) {
-      timerDisplay = ticking ? 
-      (<i className="fas fa-stop"></i>) :
-      (<i className="fas fa-play"></i>)
+      if (ticking) {
+        timerDisplay = <i className="fas fa-stop timer-icon" />;
+        timerBorderColor = '#FE484D';
+      } else {
+        timerDisplay = <i className="fas fa-play timer-icon" />;
+        timerBorderColor = '#0581e0';
+      }
     } else {
       timerDisplay = <div className="Timer-time-display">{`${min < 10 ? '0' + min : min} : ${sec < 10 ? '0' + sec : sec}`}</div>
+      timerBorderColor = ticking ? '#0581e0' :'#b9b9b9';
     }
 
     return (
-      <div>
+      <div className="Timer-container" >
           <div className="Timer-wrapper" 
+            style={{border: `1px solid ${timerBorderColor}` }}
             onMouseEnter={() => this.setState({ hoveredOnTimer: true })} 
             onMouseLeave={() => this.setState({ hoveredOnTimer: false })}
             onClick={() => this.clickTimer()}
           >
             {timerDisplay}
           </div>
-          <p>{`Mode: ${mode}`} </p>
-          <p>{`Sessions: ${currentSession}/${totalSessions}`}</p>
+          <p className="Timer-mode-display">{`Mode: ${modeForDisplay}`} </p>
+          <p className="Timer-sessions" >{`Sessions: ${currentSession}/${totalSessions}`}</p>
       </div>
     )
   }
