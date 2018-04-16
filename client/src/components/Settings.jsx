@@ -10,12 +10,14 @@ const Option = Select.Option;
 
 const mapStateToProps = state => ({
   ...state.timer,
-  ...state.settings
+  ...state.settings,
+  user: state.common.user
 })
 
 const mapDispatchToProps = dispatch => ({
   submitSettings: settings => 
     dispatch({type: ACTION.SUBMIT_SETTINGS, payload: agent.Settings.set(settings)}), 
+  submitSettingsWithoutSignIn: settings => dispatch({ type: ACTION.SUBMIT_SETTINGS, payload: {settings} })
 })
 
 class Settings extends React.Component {
@@ -78,9 +80,13 @@ class Settings extends React.Component {
   }
 
   onSubmit = () => {
-    const { close, submitSettings } = this.props;
+    const { close, submitSettings, user, submitSettingsWithoutSignIn } = this.props;
     const { focusTime, shortBreak, longBreak, totalSessions, sound } = this.state;
-    submitSettings({ focusTime, shortBreak, longBreak, totalSessions, sound });
+    if (user) {
+      submitSettings({ focusTime, shortBreak, longBreak, totalSessions, sound });
+    } else {
+      submitSettingsWithoutSignIn({ focusTime, shortBreak, longBreak, totalSessions, sound });
+    }
     close();
   }
 
