@@ -9,7 +9,7 @@ passport.use(new LocalStrategy({
 }, (email, password, done) => {
   User.findOne({email: email}).then( user => {
     if (!user || !user.validPassword(password) ) {
-      return done(null, false, {errors: {'email or password': 'is invalid'}});
+      return done(null, false, {errors: { message: 'email or password is invalid' }});
     }
 
     return done(null, user);
