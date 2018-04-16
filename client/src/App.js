@@ -17,7 +17,7 @@ import agent from './agent';
 import TestTest from './components/TestTest';
 
 
-import { Alert } from 'antd';
+import { message } from 'antd';
 
 const mapStateToProps = state => ({
   settingsOpen: state.settings.modalOpen,
@@ -30,9 +30,7 @@ const mapDispatchToProps = dispatch => ({
   closeSettings: () => dispatch({ type: ACTION.CLOSE_SETTINGS, payload: { modalOpen: false}}),
   onRedirect: () => dispatch({ type: ACTION.REDIRECT }),
   onLoad: () => dispatch({ type: ACTION.APP_LOAD, payload: agent.Auth.current()}),
-  getAllStats: () => dispatch({ type: ACTION.GET_ALL_STATS, payload: agent.Stats.all()}),
-  getSettings: () => dispatch({type: ACTION.GET_SETTINGS, payload: agent.Settings.current() }),
-  getAllTasks: () => dispatch({ type: ACTION.GET_ALL_TASKS, payload: agent.Tasks.all() }),
+  clearError: () => dispatch({ type: ACTION.CLEAR_ERROR })
 })
 
 
@@ -42,9 +40,6 @@ class App extends Component {
     if (token) {
       agent.setToken(token);
       this.props.onLoad();
-      // this.props.getAllStats();
-      this.props.getSettings();
-      this.props.getAllTasks();
     }
   }
 
@@ -59,8 +54,15 @@ class App extends Component {
       console.log('Redirected');
       this.props.history.push(nextProps.redirectTo);
       this.props.onRedirect();
-
     }
+    if (!this.props.error && nextProps.error) {
+      this.handleError(nextProps.error);
+    }
+  }
+
+  handleError = err => {
+    message.error(err);
+    this.props.clearError();
   }
 
   render() {
@@ -71,15 +73,6 @@ class App extends Component {
         
         <Header />
         <Settings visible={settingsOpen} close={closeSettings} />
-
-        {error ? 
-          <Alert 
-            message="Error"
-            description={error}
-            type="error"
-            showIcon
-          /> : null 
-        }
 
         <div className="App-container">
           <Switch>
