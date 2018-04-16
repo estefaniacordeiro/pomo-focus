@@ -53,7 +53,7 @@ class DailyTotalTime extends React.Component {
     const option = {
       legend: {},
       grid: {
-        left: 200,
+        left: 150,
         top: 20,
       },
       xAxis: {
