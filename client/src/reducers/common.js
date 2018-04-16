@@ -18,6 +18,12 @@ export default (state={...defaultValues}, action) => {
         ...state,
         inProgress: true
       })
+    
+    case ACTION.ASYNC_END:
+      return ({
+        ...state,
+        inProgress: false
+      })
 
     case ACTION.ERROR:
       return ({
@@ -29,7 +35,6 @@ export default (state={...defaultValues}, action) => {
       return ({
         ...state,
         ...action.payload.user,
-        inProgress: false,
         appLoaded: true
       })
 
@@ -55,17 +60,9 @@ export default (state={...defaultValues}, action) => {
 
     case ACTION.LOGIN:
     case ACTION.REGISTER:
-      if (action.error) {
-        return {
-          ...state,
-          error: action.payload,
-          inProgress: false
-        }
-      }
       return ({
         ...state,
         ...action.payload.user,
-        inProgress: false,
         redirectTo: '/'
       })
 
