@@ -10,6 +10,7 @@ const promiseMiddleware = store => next => action => {
       console.log(res);
       action.payload = res;
       store.dispatch(action);
+      store.dispatch({ type: ACTION.ASYNC_END });
     }, error => {
       console.dir(error);
       action.error = true;
@@ -17,6 +18,7 @@ const promiseMiddleware = store => next => action => {
       const errMessage = error.response.body ?  error.response.body.errors.message : error.response;
       // store.dispatch(action);
       store.dispatch({ type: ACTION.ERROR, payload: errMessage});
+      store.dispatch({ type: ACTION.ASYNC_END });
     });
     return;
   }
