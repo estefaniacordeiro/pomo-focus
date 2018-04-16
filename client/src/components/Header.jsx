@@ -3,6 +3,7 @@ import { Popover, Tooltip } from 'antd';
 import ACTION from '../constants';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import '../css/Header.css';
 
 const mapStateToProps = state => ({
   user: state.common.user
@@ -20,13 +21,17 @@ class Header extends React.Component {
     const { user, logOut } = this.props;
 
     const unLoggedInMenu = (
-      <ul>
-        <li>
-         <Link to='/register'>Sign Up</Link>
-        </li>
-        <li>
-          <Link to='/sign-in'>Sign In</Link>
-        </li>
+      <ul className="unLoggedInMenu" >
+       <Link to='/register'>
+          <li className="unLoggedInMenu-item" >
+          Sign Up
+          </li>
+        </Link>
+        <Link to='/sign-in'>
+          <li className="unLoggedInMenu-item" >
+            Sign In
+          </li>
+        </Link>
       </ul>
     )
     

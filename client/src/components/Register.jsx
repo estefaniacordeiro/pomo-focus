@@ -88,7 +88,7 @@ class RegistrationForm extends React.Component {
         },
         sm: {
           span: 16,
-          offset: 8,
+          offset: 1,
         },
       },
     };

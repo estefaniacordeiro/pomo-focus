@@ -4,6 +4,7 @@ import { Form, Icon, Input, Button } from 'antd';
 import { connect } from 'react-redux';
 import ACTION from '../constants';
 import agent from '../agent';
+import '../css/Signin.css';
 
 const FormItem = Form.Item;
 
@@ -50,7 +51,7 @@ class SignInForm extends React.Component {
             )}
           </FormItem>
           <FormItem>
-            <Button type="primary" htmlType="submit" className="login-form-button" disable={inProgress.toString()}>
+            <Button type="primary" htmlType="submit" className="login-form-button" disabled={inProgress}>
               Sign in
             </Button>
             <LoadingIcon show={inProgress} />
