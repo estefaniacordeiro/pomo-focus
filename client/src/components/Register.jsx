@@ -76,7 +76,7 @@ class RegistrationForm extends React.Component {
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 8 },
+        sm: { span: 8, offset:8 },
       },
     };
 
@@ -87,8 +87,8 @@ class RegistrationForm extends React.Component {
           offset: 0,
         },
         sm: {
-          span: 16,
-          offset: 1,
+          span: 8,
+          offset: 8,
         },
       },
     };
@@ -96,7 +96,7 @@ class RegistrationForm extends React.Component {
     return (
       <div className="Register-container">
         <Form onSubmit={this.handleSubmit} >
-          <FormItem {...formItemLayout} label="E-mail" >
+          <FormItem {...formItemLayout} >
             { getFieldDecorator('email', {
               rules: [{
                 type: 'email', message: 'The input is not valid E-mail!',
@@ -104,11 +104,11 @@ class RegistrationForm extends React.Component {
                 required: true, message: 'Please input your E-mail!',
               }],
 
-            })(<Input />) }
+            })(<Input placeholder="Email" />) }
             { error ? <span className=".input-validate-error">{error}</span> : null }
           </FormItem>
 
-          <FormItem {...formItemLayout} label="Password" >
+          <FormItem {...formItemLayout} >
             {getFieldDecorator('password', {
               rules: [{
                 required: true, message: 'Please input your password!',
@@ -116,11 +116,11 @@ class RegistrationForm extends React.Component {
                 validator: this.validateToNextPassword,
               }],
             })(
-              <Input type="password" />
+              <Input type="password" placeholder="New password" />
             )}
           </FormItem>
 
-          <FormItem {...formItemLayout} label="Confirm Password" >
+          <FormItem {...formItemLayout}>
             { getFieldDecorator('confirm', {
               rules: [{
                 required: true, message: 'Please confirm your password!',
@@ -128,7 +128,7 @@ class RegistrationForm extends React.Component {
                 validator: this.compareToFirstPassword,
               }],
             })(
-              <Input type="password" onBlur={this.handleConfirmBlur} />
+              <Input type="password" onBlur={this.handleConfirmBlur} placeholder="Confirm your password" />
             ) }
           </FormItem>
 
