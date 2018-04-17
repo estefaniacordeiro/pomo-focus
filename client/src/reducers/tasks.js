@@ -3,8 +3,6 @@ import ACTION from '../constants';
 export default (state=[], action) => {
   switch(action.type) {
     case ACTION.GET_ALL_TASKS:
-      console.log('get-all-tasks TASKS');
-      
       return [ ...action.payload.tasks ];
 
     case ACTION.ADD_TASK:

@@ -80,8 +80,6 @@ export default (state={...defaultValues}, action) => {
       })
 
     case ACTION.GET_ALL_TASKS:
-      console.log('get-all-tasks COMMON');
-      
       return ({
         ...state,
         tasksLoaded: true

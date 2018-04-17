@@ -14,9 +14,7 @@ const promiseMiddleware = store => next => action => {
     }, error => {
       console.dir(error);
       action.error = true;
-      // action.payload 
       const errMessage = error.response.body ?  error.response.body.errors.message : error.response;
-      // store.dispatch(action);
       store.dispatch({ type: ACTION.ERROR, payload: errMessage});
       store.dispatch({ type: ACTION.ASYNC_END });
     });
