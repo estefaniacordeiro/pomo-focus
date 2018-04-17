@@ -1,13 +1,15 @@
 import React from 'react';
-import { List, Input } from 'antd';
+import { List, Input, Alert } from 'antd';
 import { connect } from 'react-redux';
 import agent from '../agent';
 import ACTION from '../constants';
 import '../css/TaskList.css';
+import '../css/Statistics.css';
 
 const mapStateToProps = state => ({
   tasks: state.tasks.slice().reverse(),
-  tasksLoaded: state.common.tasksLoaded
+  tasksLoaded: state.common.tasksLoaded,
+  user: state.common.user
 })
 const mapDispatchToProps = dispatch => ({
   submitNewName: payload => 
@@ -29,7 +31,6 @@ class TaskList extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('component will receive props');
     // Must compare tasksLoaded diff. Otherwise this method will keep getting called. Don't know why
     if (this.props.tasksLoaded && !nextProps.tasksLoaded ) {
       this.props.getAllTasks();
@@ -83,8 +84,22 @@ class TaskList extends React.Component {
 
 
   render() {
-    const { tasks, tasksLoaded } = this.props;
+    const { tasks, tasksLoaded, user } = this.props;
     const { inEditId, nameInput, listHeight } = this.state;
+
+    if (!user) {
+      return (
+        <div style={{ width: 400, margin: '0 auto'}} >
+          <Alert 
+            className="alert-warning-no-signin"
+            message='Oops!'
+            description='You must sign in to use this feature.'
+            type='warning'
+            showIcon
+          />
+        </div>
+      )
+    }
 
     return (
       <div className="Task-list-wrapper" style={{height: listHeight }} >

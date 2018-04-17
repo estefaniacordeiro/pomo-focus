@@ -18,7 +18,8 @@ const mapStateToProps = state => ({
   sound: state.settings.sound,
   tasks: state.tasks,
   minutesThisRound: state.timer.minutesThisRound,
-  instance: state.timer.instance
+  instance: state.timer.instance,
+  user: state.common.user
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -99,13 +100,13 @@ class Timer extends React.Component {
   }
 
   timerEnded() {
-    const { mode, currentSession, sessionsGoal, tasks, minutesThisRound  } = this.props;
+    const { mode, currentSession, sessionsGoal, tasks, minutesThisRound, user  } = this.props;
     this.props.endTimer({ticking: false, instance: null});
     this.playAlert();
     let nextMode, nextSessionNum;
     if (mode === 'focus') {
       this.popNotification('Focus');
-      this.addStats(minutesThisRound, Date.now(), tasks.slice(-1)[0]);
+      user && this.addStats(minutesThisRound, Date.now(), tasks.slice(-1)[0]);
       if (currentSession === sessionsGoal - 1) {
         nextMode = 'long-break';
       } else {
