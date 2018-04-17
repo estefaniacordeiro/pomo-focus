@@ -93,4 +93,14 @@ body {
   color: black;
 }
 
+.footer-description {
+  font-family: 'open sans';
+  font-weight: bold;
+  font-size: 17px;
+}
 
+.footer-author {
+  font-family: 'lobster';
+  font-size: 19px;
+  margin: 0 10px;
+}

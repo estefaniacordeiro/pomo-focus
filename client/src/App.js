@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './App.css';
 import { Route, Switch } from 'react-router-dom';
+import moment from 'moment';
 import ACTION from './constants';
 
 import Home from './components/Home';
@@ -66,7 +67,7 @@ class App extends Component {
   }
 
   render() {
-    const { settingsOpen, closeSettings, error } = this.props;
+    const { settingsOpen, closeSettings, error, user } = this.props;
 
     return (
       <div className="App">
@@ -85,6 +86,11 @@ class App extends Component {
             <Route path="/test" component={TestTest} />
           </Switch>
         </div>
+
+        <footer className="footer-decription">
+          Coded by 
+          <a href="https://github.com/hieverest" target="_blank" className="footer-author">Qianchen</a>
+        </footer>
       </div>
     );
   }
