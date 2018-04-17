@@ -15,7 +15,7 @@ router.get('/all', auth.required, (req, res, next) => {
   }).catch(next);
 })
 
-router.get('/', auth.required, (req, res, next) => {
+router.get('', auth.required, (req, res, next) => {
   User.findById(req.payload.id).then( user => {
     if (!user) {
       return res.sendStatus(401);

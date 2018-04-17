@@ -55,7 +55,7 @@ const Stats = {
   addStats: payload => requests.post('/stats', { stats: payload }),
   // Here is an example of using fetch
   getStatsByDate: date => 
-    fetch(`${API_ROOT}/stats/?date=${date}`, { 
+    fetch(`${API_ROOT}/stats?date=${date}`, { 
       method: 'GET',
       headers: new Headers({
         'Content-Type': 'application/json',

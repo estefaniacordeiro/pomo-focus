@@ -3,6 +3,7 @@ import { Popover, Tooltip } from 'antd';
 import ACTION from '../constants';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 import '../css/Header.css';
 
 const mapStateToProps = state => ({
@@ -55,7 +56,7 @@ class Header extends React.Component {
           </ Link>
           <div className="App-header-buttons">
             <Tooltip title="Statistics" placement="bottom">
-              <Link to='/stats'>
+              <Link to={`/stats?date=${moment().format('YYYY-MM-DD')}`}>
                 <i className="fas fa-chart-pie nav-button" />
               </Link>
             </ Tooltip>

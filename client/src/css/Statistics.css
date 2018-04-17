@@ -14,3 +14,7 @@
   cursor: pointer;
   color: #40a9ff;
 }
+
+.alert-warning-no-signin {
+  text-align: left;
+}

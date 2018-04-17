@@ -2,11 +2,12 @@ import React from 'react';
 import TimelineBar from './charts/TimelineBar';
 import DailyTotalTime from './charts/DailyTotalTime';
 import { connect } from 'react-redux';
-import { DatePicker, Spin } from 'antd';
+import { DatePicker, Spin, Alert } from 'antd';
 import moment from 'moment';
 import ACTION from '../constants';
 import agent from '../agent';
 import '../css/Statistics.css';
+import { SSL_OP_NO_QUERY_MTU } from 'constants';
 
 const mapStateToProps = state => ({
   stats: state.stats,
@@ -14,34 +15,59 @@ const mapStateToProps = state => ({
   appLoaded: state.common.appLoaded,
   tasks: state.tasks,
   tasksLoaded: state.common.tasksLoaded,
-  statsLoaded: state.common.statsLoaded
+  statsLoaded: state.common.statsLoaded,
+  user: state.common.user
 })
 
 const mapDispatchToProps = dispatch => ({
   getStats: date => dispatch({ type: ACTION.GET_STATS, payload: agent.Stats.getStatsByDate(date)}),
-  requestStats: () => dispatch({ type: ACTION.REQUEST_STATS })
+  requestStats: () => dispatch({ type: ACTION.REQUEST_STATS }),
+  throwError: err => dispatch({ type: ACTION.ERROR, payload: err }),
+  getAllTasks: () => dispatch({ type: ACTION.GET_ALL_TASKS, payload: agent.Tasks.all() }),
 })
 
 class Statistics extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      date: moment().format('YYYY-MM-DD')
-    }
+    // this.state = {
+    //   date: moment().format('YYYY-MM-DD')
+    // }
     this.setUpTasksIdMap(props);
+    if (props.user) {
+      this.date = this.parseQueryString(this.props.history.location.search);
+      !this.date && this.props.getStats(this.date);
+    }
   }
 
   componentDidMount() {
-    const { date } = this.state;
-    this.props.getStats(date);
+    // const { date } = this.state;
+    const { tasksLoaded, getAllTasks } = this.props;
+
+    if (!tasksLoaded) {
+      getAllTasks();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
+
+    const { user } = this.props;
+
+    // When initially get user token and fetch stats
+    if (!this.props.user && nextProps.user) {
+      this.date = this.parseQueryString(this.props.history.location.search);
+      this.date && this.props.getStats(this.date); 
+      this.lastQueryString = this.props.history.location.search;
+    }
+    
+    // Fetch stats when date changes
+    if (nextProps.user && this.lastQueryString !== nextProps.history.location.search) {
+      this.lastQueryString = nextProps.history.location.search;
+      this.date = this.parseQueryString(nextProps.history.location.search);
+      this.date && this.props.getStats(this.date);  
+    }
+    
     this.setUpTasksIdMap(nextProps);
     
-    if (this.props.statsLoaded && !nextProps.statsLoaded) {
-      this.props.getStats(this.state.date);
-    }
   }
 
   setUpTasksIdMap = (props) => {
@@ -56,34 +82,64 @@ class Statistics extends React.Component {
 
   handleDateChange = moment => {
     if (moment) {
-      this.setState({
-        date: moment.format('YYYY-MM-DD')
-      }, this.props.requestStats);
+      const newDate = moment.format('YYYY-MM-DD');
+      this.props.history.push(`/stats?date=${newDate}`);
+      this.date = newDate;
+      // this.setState({
+      //   date: moment.format('YYYY-MM-DD')
+      // }, this.props.requestStats);
     }
     
   }
 
   handleDateBackOrForth = direction => {
-    const { date } = this.state;
+    const date = this.date;
+    const url = '/stats?date=';
+    let newDate;
     if (direction === 'back') {
-      this.setState({
-        date: moment(date).subtract(1, 'd').format('YYYY-MM-DD')
-      }, this.props.requestStats)
+      newDate = moment(date).subtract(1, 'd').format('YYYY-MM-DD');
+      // this.setState({
+      //   date: moment(date).subtract(1, 'd').format('YYYY-MM-DD')
+      // }, this.props.requestStats)
     } else {
-      this.setState({
-        date: moment(date).add(1, 'd').format('YYYY-MM-DD')
-      }, this.props.requestStats)
+      newDate = moment(date).add(1, 'd').format('YYYY-MM-DD');
+      // this.setState({
+      //   date: moment(date).add(1, 'd').format('YYYY-MM-DD')
+      // }, this.props.requestStats)
     }
+    this.date = newDate;
+    this.props.history.push(`${url}${newDate}`);
+  }
+
+  parseQueryString = qs => {
+    const date = qs.slice(6);
+    return moment(date).isValid() ? date : null
   }
 
   render() {
-    const { stats, statsLoaded, tasksLoaded, statsByDate } = this.props;
-    const { date } = this.state;
+    const { stats, statsLoaded, tasksLoaded, statsByDate, user, throwError } = this.props;
+    // const { date } = this.state;
+    if (!this.date && user) {
+      throwError('URL is invalid!');
+      return null;
+    }    
+    const date = this.date;
+
     const dateForDatePick = moment(date);
-    console.log(stats);
-    console.log(date);
     
-  
+    if (!user) {
+      return (
+        <div style={{ width: 400, margin: '0 auto' }}>
+          <Alert 
+            className="alert-warning-no-signin"
+            message='Oops!'
+            description='You must sign in to use this feature.'
+            type='warning'
+            showIcon
+          />
+        </div>
+      )
+    }
 
     return (
       <div className="Stats-container">
