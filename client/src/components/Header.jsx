@@ -35,6 +35,21 @@ class Header extends React.Component {
         </Link>
       </ul>
     )
+
+    const signUpAndSignIn = (
+      <div className='Header-signup-signin'>
+        <Link to='/register' className='Header-signup-signin-link' >
+          <span className="Header-signup-signin-item" >
+          Sign Up
+          </span>
+        </Link>
+        <Link to='/sign-in' className='Header-signup-signin-link' >
+          <span className="Header-signup-signin-item" >
+            Sign In
+          </span>
+        </Link>
+      </div>
+    )
     
     const loggedInMenu = (
       <div>
@@ -47,7 +62,8 @@ class Header extends React.Component {
       <div className="App-header-outter-wrapper">
         <header className="App-header-wrapper">
           <span className="App-header-version-number">
-            V 0.0.1
+            <a href="#" className='Header-version-number'>V 0.0.1</a>
+            { user ? null : signUpAndSignIn }
           </span>
           <Link to='/'>
             <span className="App-header-name">

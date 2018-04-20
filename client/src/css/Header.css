@@ -14,3 +14,26 @@
 .unLoggedInMenu-item:hover {
   color: black;
 }
+
+.Header-signup-signin {
+  display: inline-block;
+}
+
+.Header-version-number {
+  margin-right: 20px;
+}
+
+.Header-signup-signin-link {
+  text-decoration: none;
+}
+
+.Header-signup-signin-item {
+  margin: 0 10px;
+  color: lightslategray;
+  font-size: 17px;
+  transition: all .2s ease-in-out;
+}
+
+.Header-signup-signin-item:hover {
+  color: black;
+}
