@@ -35,6 +35,7 @@ const mapDispatchToProps = dispatch => ({
       payload: Promise.all([agent.Tasks.addStats(payload), agent.Stats.addStats(payload)]),   
       stats: payload
     }),
+  throwError: error => dispatch({ type: ACTION.ERROR, payload: error })
 })
 
 class Timer extends React.Component {
@@ -158,8 +159,11 @@ class Timer extends React.Component {
 
   clickTimer() {
     const { hoveredOnTimer } = this.state;
-    const { ticking } = this.props;
+    const { ticking, user, tasks, throwError } = this.props;
     if (hoveredOnTimer && !ticking) {
+      if (user && tasks.length === 0) {
+        return throwError('Please add a task first.');
+      }
       this.setState({ hoveredOnTimer: false})
       return this.startTimer();
     }
