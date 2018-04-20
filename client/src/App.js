@@ -18,7 +18,7 @@ import agent from './agent';
 import TestTest from './components/TestTest';
 
 
-import { message } from 'antd';
+import { message, Spin } from 'antd';
 
 const mapStateToProps = state => ({
   settingsOpen: state.settings.modalOpen,
@@ -30,7 +30,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   closeSettings: () => dispatch({ type: ACTION.CLOSE_SETTINGS, payload: { modalOpen: false}}),
   onRedirect: () => dispatch({ type: ACTION.REDIRECT }),
-  onLoad: () => dispatch({ type: ACTION.APP_LOAD, payload: agent.Auth.current()}),
+  getUserAndLoadApp: payload => dispatch({ type: ACTION.APP_LOAD, payload }),
   clearError: () => dispatch({ type: ACTION.CLEAR_ERROR })
 })
 
@@ -40,7 +40,9 @@ class App extends Component {
     const token = window.localStorage.getItem('jwt');
     if (token) {
       agent.setToken(token);
-      this.props.onLoad();
+      this.props.getUserAndLoadApp(agent.Auth.current());
+    } else {
+      this.props.getUserAndLoadApp({user: null});
     }
   }
 
@@ -67,31 +69,31 @@ class App extends Component {
   }
 
   render() {
-    const { settingsOpen, closeSettings, error, user } = this.props;
+    const { settingsOpen, closeSettings, error, user, appLoaded } = this.props;
 
     return (
-      <div className="App">
-        
-        <Header />
-        <Settings visible={settingsOpen} close={closeSettings} />
+      <Spin size='large' spinning={!appLoaded} >
+        <div className="App">
+          <Header />
+          <Settings visible={settingsOpen} close={closeSettings} />
+          <div className="App-container">
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route path="/register" component={Register} />
+              <Route path="/sign-in" component={SignIn} />
+              <Route path="/stats" component={Statistics} />
+              <Route path="/tasks" component={TaskList} />
+              <Route path="/add-test-stats" component={AddTestStats} />
+              <Route path="/test" component={TestTest} />
+            </Switch>
+          </div>
 
-        <div className="App-container">
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route path="/register" component={Register} />
-            <Route path="/sign-in" component={SignIn} />
-            <Route path="/stats" component={Statistics} />
-            <Route path="/tasks" component={TaskList} />
-            <Route path="/add-test-stats" component={AddTestStats} />
-            <Route path="/test" component={TestTest} />
-          </Switch>
+          <footer className="footer-decription">
+            Coded by 
+            <a href="https://github.com/hieverest" target="_blank" className="footer-author">Qianchen</a>
+          </footer>
         </div>
-
-        <footer className="footer-decription">
-          Coded by 
-          <a href="https://github.com/hieverest" target="_blank" className="footer-author">Qianchen</a>
-        </footer>
-      </div>
+      </ Spin>
     );
   }
 }

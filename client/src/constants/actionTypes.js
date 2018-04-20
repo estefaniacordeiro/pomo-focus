@@ -32,6 +32,7 @@ export const REQUEST_STATS = 'REQUEST_STATS';
 export const REGISTER = 'REGISTER';
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
+export const GET_USER = 'GET_USER';
 
 export const ASYNC_START = 'ASYNC_START';
 export const ASYNC_END = 'ASYNC_END';
