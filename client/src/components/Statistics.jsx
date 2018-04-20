@@ -41,22 +41,26 @@ class Statistics extends React.Component {
 
   componentDidMount() {
     // const { date } = this.state;
-    const { tasksLoaded, getAllTasks } = this.props;
+    const { tasksLoaded, getAllTasks, user } = this.props;
 
-    if (!tasksLoaded) {
+    if (!tasksLoaded && user) {
       getAllTasks();
     }
   }
 
   componentWillReceiveProps(nextProps) {
 
-    const { user } = this.props;
+    const { user, tasksLoaded } = this.props;
 
     // When initially get user token and fetch stats
     if (!this.props.user && nextProps.user) {
       this.date = this.parseQueryString(this.props.history.location.search);
       this.date && this.props.getStats(this.date); 
       this.lastQueryString = this.props.history.location.search;
+
+      if (!tasksLoaded) {
+        this.props.getAllTasks();
+      }
     }
     
     // Fetch stats when date changes
