@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "concurrently": "^3.5.1",
     "cors": "^2.8.4",
     "errorhandler": "^1.5.0",
     "express": "^4.16.3",
@@ -19,7 +20,9 @@
     "passport-local": "^1.0.0"
   },
   "scripts": {
-    "start": "node server",
+    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "client": "cd client && npm install && npm start",
+    "server": "node server",
     "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
