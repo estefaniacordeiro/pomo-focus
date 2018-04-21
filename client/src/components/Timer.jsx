@@ -11,15 +11,11 @@ const mapStateToProps = state => ({
   mode: state.timer.mode,
   ticking: state.timer.ticking,
   currentSession: state.timer.currentSession,
-  totalSessions: state.settings.totalSessions,
-  focusTime: state.settings.focusTime,
-  shortBreak: state.settings.shortBreak,
-  longBreak: state.settings.longBreak,
-  sound: state.settings.sound,
   tasks: state.tasks,
   minutesThisRound: state.timer.minutesThisRound,
   instance: state.timer.instance,
-  user: state.common.user
+  user: state.common.user,
+  ...state.settings
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -136,18 +132,33 @@ class Timer extends React.Component {
     if (Notification.permission !== 'granted') {
       return;
     }
-    
-    const noti = new Notification(`${mode} finished. Click to start ${mode === 'Focus' ? 'break' : 'focus'}`);
-    noti.addEventListener('click', () => {
-      this.startTimer();
-    })
+    const { autoStartsBreak } = this.props;
+
+    let text = `${mode} finished.`
+
+    if (autoStartsBreak && mode === 'Break') {
+      text += 'Click to start focus.';
+    }
+
+    if (!autoStartsBreak) {
+      text += `Click to start ${mode === 'Focus' ? 'break' : 'focus'}`; 
+    }
+
+    const noti = new Notification(text);
+    if ((autoStartsBreak && mode === 'Break') || !autoStartsBreak) {
+      noti.addEventListener('click', () => {
+        this.startTimer();
+      })
+    } 
+
     setTimeout( () => noti.close(), 5000);
   }
 
   resetTimer( mode, sessionNum) {
-    const { setMode, setSessionNum  } = this.props;
+    const { setMode, setSessionNum, autoStartsBreak  } = this.props;
     setMode(mode);
     setSessionNum(sessionNum);
+    autoStartsBreak && mode.includes('break') && this.startTimer();
   }
 
   interrupt() {
