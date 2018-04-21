@@ -70,7 +70,7 @@ class App extends Component {
 
   render() {
     const { settingsOpen, closeSettings, error, user, appLoaded } = this.props;
-
+    
     return (
       <Spin size='large' spinning={!appLoaded} >
         <div className="App">

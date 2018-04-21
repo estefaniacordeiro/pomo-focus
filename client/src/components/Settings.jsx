@@ -114,8 +114,6 @@ class Settings extends React.Component {
 
 
   render() {
-    console.log('settings render');
-    
     const { close } = this.props;
     const { focusTime, shortBreak, longBreak, totalSessions, alert, autoStartsBreak, sound } = this.state;
 
