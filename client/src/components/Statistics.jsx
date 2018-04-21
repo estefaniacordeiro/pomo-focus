@@ -27,26 +27,33 @@ const mapDispatchToProps = dispatch => ({
 })
 
 class Statistics extends React.Component {
-  constructor(props) {
-    super(props);
-    // this.state = {
-    //   date: moment().format('YYYY-MM-DD')
-    // }
-    this.setUpTasksIdMap(props);
-    if (props.user) {
+  // constructor(props) {
+  //   super(props);
+  //   // this.state = {
+  //   //   date: moment().format('YYYY-MM-DD')
+  //   // }
+  //   this.setUpTasksIdMap(props);
+  //   if (props.user) {
+  //     this.date = this.parseQueryString(this.props.history.location.search);
+  //     !this.date && this.props.getStats(this.date);
+  //   }
+  // }
+  componentWillMount() {
+    this.setUpTasksIdMap(this.props);
+    if (this.props.user) {
       this.date = this.parseQueryString(this.props.history.location.search);
-      !this.date && this.props.getStats(this.date);
-    }
+      this.date && this.props.getStats(this.date);
+    } 
   }
 
-  componentDidMount() {
-    // const { date } = this.state;
-    const { tasksLoaded, getAllTasks, user } = this.props;
+  // componentDidMount() {
+  //   // const { date } = this.state;
+  //   const { tasksLoaded, getAllTasks, user } = this.props;
 
-    if (!tasksLoaded && user) {
-      getAllTasks();
-    }
-  }
+  //   if (!tasksLoaded && user) {
+  //     getAllTasks();
+  //   }
+  // }
 
   componentWillReceiveProps(nextProps) {
 
@@ -153,10 +160,12 @@ class Statistics extends React.Component {
           <i className="fas fa-angle-right Stats-arrow" onClick={() => this.handleDateBackOrForth('forth')} />
         </div>
         <Spin spinning={ !tasksLoaded || !statsLoaded } size="large" >
-          <div>
-            <TimelineBar stats={statsByDate} tasksIdMap={this.tasksIdMap} date={date} />
-            <DailyTotalTime stats={statsByDate} tasksIdMap={this.tasksIdMap} date={date}/>
-          </div>
+          { !tasksLoaded || !statsLoaded ? null : 
+            <div>
+              <TimelineBar stats={statsByDate} tasksIdMap={this.tasksIdMap} date={date} />
+              <DailyTotalTime stats={statsByDate} tasksIdMap={this.tasksIdMap} date={date}/>
+            </div>
+          }
         </Spin>
       </div>
     )
