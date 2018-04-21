@@ -62,7 +62,7 @@ class Header extends React.Component {
       <div className="App-header-outter-wrapper">
         <header className="App-header-wrapper">
           <span className="App-header-version-number">
-            <a href="#" className='Header-version-number'>V 0.0.1</a>
+            <a href="" className='Header-version-number'>V 0.0.1</a>
             { user ? null : signUpAndSignIn }
           </span>
           <Link to='/'>

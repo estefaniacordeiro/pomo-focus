@@ -7,7 +7,6 @@ import moment from 'moment';
 import ACTION from '../constants';
 import agent from '../agent';
 import '../css/Statistics.css';
-import { SSL_OP_NO_QUERY_MTU } from 'constants';
 
 const mapStateToProps = state => ({
   stats: state.stats,
@@ -27,17 +26,7 @@ const mapDispatchToProps = dispatch => ({
 })
 
 class Statistics extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //   // this.state = {
-  //   //   date: moment().format('YYYY-MM-DD')
-  //   // }
-  //   this.setUpTasksIdMap(props);
-  //   if (props.user) {
-  //     this.date = this.parseQueryString(this.props.history.location.search);
-  //     !this.date && this.props.getStats(this.date);
-  //   }
-  // }
+ 
   componentWillMount() {
     this.setUpTasksIdMap(this.props);
     if (this.props.user) {
@@ -46,18 +35,9 @@ class Statistics extends React.Component {
     } 
   }
 
-  // componentDidMount() {
-  //   // const { date } = this.state;
-  //   const { tasksLoaded, getAllTasks, user } = this.props;
-
-  //   if (!tasksLoaded && user) {
-  //     getAllTasks();
-  //   }
-  // }
-
   componentWillReceiveProps(nextProps) {
 
-    const { user, tasksLoaded } = this.props;
+    const { tasksLoaded } = this.props;
 
     // When initially get user token and fetch stats
     if (!this.props.user && nextProps.user) {
@@ -128,7 +108,7 @@ class Statistics extends React.Component {
   }
 
   render() {
-    const { stats, statsLoaded, tasksLoaded, statsByDate, user, throwError } = this.props;
+    const { statsLoaded, tasksLoaded, statsByDate, user, throwError } = this.props;
     // const { date } = this.state;
     if (!this.date && user) {
       throwError('URL is invalid!');

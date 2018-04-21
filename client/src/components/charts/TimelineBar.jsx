@@ -30,7 +30,7 @@ function renderItem(params, api) {
 
 
 function getOption(data, date, tasksIdMap) {
-  const taskNames = Object.values(tasksIdMap).map(name => ({name}));
+  // const taskNames = Object.values(tasksIdMap).map(name => ({name}));
   return ({
     tooltip: {
       formatter: function (params) {

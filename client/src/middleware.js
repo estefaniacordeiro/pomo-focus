@@ -6,8 +6,8 @@ const promiseMiddleware = store => next => action => {
     store.dispatch({ type: ACTION.ASYNC_START, subtype: action.type });
 
     action.payload.then( res => {
-      console.log('RESULT:');
-      console.log(res);
+      // console.log('RESULT:');
+      // console.log(res);
       action.payload = res;
       store.dispatch(action);
       store.dispatch({ type: ACTION.ASYNC_END });

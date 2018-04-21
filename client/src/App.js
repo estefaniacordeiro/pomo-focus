@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './App.css';
 import { Route, Switch } from 'react-router-dom';
-import moment from 'moment';
 import ACTION from './constants';
 
 import Home from './components/Home';
@@ -69,7 +68,7 @@ class App extends Component {
   }
 
   render() {
-    const { settingsOpen, closeSettings, error, user, appLoaded } = this.props;
+    const { settingsOpen, closeSettings, appLoaded } = this.props;
     
     return (
       <Spin size='large' spinning={!appLoaded} >
