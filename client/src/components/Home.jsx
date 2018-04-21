@@ -17,7 +17,15 @@ const mapDispatchToProps = dispatch => ({
 
 class Home extends React.Component {
 
-    componentWillReceiveProps(nextProps) {
+  componentWillMount() {
+    const { user, getAllTasks, getSettings } = this.props;
+    if (user) {
+      getAllTasks();
+      getSettings();
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
     const { getAllTasks, getSettings } = this.props;
     if (!this.props.user && nextProps.user) {
       getAllTasks();
