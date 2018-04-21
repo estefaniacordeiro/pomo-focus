@@ -9,7 +9,6 @@ import '../css/Settings.css';
 const Option = Select.Option;
 
 const mapStateToProps = state => ({
-  ...state.timer,
   ...state.settings,
   user: state.common.user
 })
