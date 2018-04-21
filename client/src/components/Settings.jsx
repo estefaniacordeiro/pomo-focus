@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, TimePicker, InputNumber, Alert, Select } from 'antd';
+import { Modal, TimePicker, InputNumber, Alert, Select, Switch } from 'antd';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import ACTION from '../constants';
@@ -24,7 +24,7 @@ class Settings extends React.Component {
 
   constructor(props) {
     super(props);
-    const { focusTime, shortBreak, longBreak, totalSessions } = props;
+    const { focusTime, shortBreak, longBreak, totalSessions, autoStartsBreak, sound } = props;
     this.state = {
       visible: false,
       focusTime,
@@ -32,7 +32,8 @@ class Settings extends React.Component {
       longBreak,
       totalSessions,
       alert: null,
-      sound: 'definite'
+      autoStartsBreak,
+      sound
     }
     this.timePickers = {};
   }
@@ -43,12 +44,14 @@ class Settings extends React.Component {
 
 
   componentWillReceiveProps(nextProps) {
-    const { focusTime, shortBreak, longBreak, totalSessions } = nextProps;
+    const { focusTime, shortBreak, longBreak, totalSessions, autoStartsBreak, sound } = nextProps;
     this.setState({
       focusTime,
       shortBreak,
       longBreak,
       totalSessions,
+      autoStartsBreak,
+      sound,
       visible: nextProps.visible
     })
   }
@@ -79,13 +82,19 @@ class Settings extends React.Component {
     })
   }
 
+  handleAutoStartsBreak = checked => {
+    this.setState({
+      autoStartsBreak: checked
+    })
+  }
+
   onSubmit = () => {
     const { close, submitSettings, user, submitSettingsWithoutSignIn } = this.props;
-    const { focusTime, shortBreak, longBreak, totalSessions, sound } = this.state;
+    const { focusTime, shortBreak, longBreak, totalSessions, sound, autoStartsBreak } = this.state;
     if (user) {
-      submitSettings({ focusTime, shortBreak, longBreak, totalSessions, sound });
+      submitSettings({ focusTime, shortBreak, longBreak, totalSessions, sound, autoStartsBreak });
     } else {
-      submitSettingsWithoutSignIn({ focusTime, shortBreak, longBreak, totalSessions, sound });
+      submitSettingsWithoutSignIn({ focusTime, shortBreak, longBreak, totalSessions, sound, autoStartsBreak });
     }
     close();
   }
@@ -106,8 +115,10 @@ class Settings extends React.Component {
 
 
   render() {
+    console.log('settings render');
+    
     const { close } = this.props;
-    const { focusTime, shortBreak, longBreak, totalSessions, alert } = this.state;
+    const { focusTime, shortBreak, longBreak, totalSessions, alert, autoStartsBreak, sound } = this.state;
 
     return (
       <Modal
@@ -166,7 +177,7 @@ class Settings extends React.Component {
         <div className="Settings-item">
           <div className="Settings-item-name">Alert sound</div>
           <div className="Settings-item-content">
-            <Select defaultValue='definite' style={{width: 120}} onChange={this.handleSoundSelect} >
+            <Select value={sound} style={{width: 120}} onChange={this.handleSoundSelect} >
               <Option value='definite'>Definite</Option>
               <Option value='attention-seeker'>Attention-seeker</Option>
               <Option value='jingle-bells'>Jingle-bells</Option>
@@ -175,7 +186,12 @@ class Settings extends React.Component {
             <i className="fas fa-play-circle play-sound" onClick={this.playSound} />
           </div>
         </div>
-
+        <div className="Settings-item">
+          <div className="Settings-item-name">Auto starts break</div>
+          <div className="Settings-item-content">
+            <Switch checked={autoStartsBreak} onChange={this.handleAutoStartsBreak} />
+          </div>
+        </div>
       </div>
 
       

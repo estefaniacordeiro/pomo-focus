@@ -20,7 +20,9 @@ const UserSchema = new mongoose.Schema({
     focusTime: { type: Number, default: 25 },
     shortBreak: { type: Number, default: 5 },
     longBreak: { type: Number, default: 15 },
-    totalSessions: { type: Number, default: 4}
+    totalSessions: { type: Number, default: 4},
+    sound: { type: String, default: 'definite'},
+    autoStartsBreak: { type: Boolean, default: false}
   },
   stats: { type: Schema.Types.Mixed, default: {} },
   tasks: [ { name: String, lastUpdated: Number, stats: { type: Schema.Types.Mixed, default: {} } } ] 
