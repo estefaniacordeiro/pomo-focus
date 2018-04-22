@@ -7,6 +7,8 @@ I have deployed the app on Heroku.com. Please try the demo here: [Pomo Timer](ht
 
 At the moment, the app has only been developed and tested in Chrome. So plese run the app in Chrome.
 
+Please sign in the demo account to see the demo data. email: demo@demo.com,  password: sdfjkl
+
 ## Features
 1. Sign up & Sign in
 
@@ -45,6 +47,8 @@ At the moment, the app has only been developed and tested in Chrome. So plese ru
     The first one is the daily time distributing bar charts. In this chart, user could check the task, and when and how long he/she is doing it.
 
     The second chart is about the total time the user has spent on each task.
+
+    Please check the demo stats from date 04-19-2018 to 04-21-2018.
 
 ## Meet some specifical requirements
 - On the task management page, when tasks exceeds the height of the frame, infinite scrolling will be implemented. 
