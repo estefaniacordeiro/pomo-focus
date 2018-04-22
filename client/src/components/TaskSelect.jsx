@@ -13,7 +13,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   addTask: newTask => dispatch({type: ACTION.ADD_TASK, payload: agent.Tasks.addNewTask(newTask) }),
   setCurrentTask: (id, lastUpdated, tasks) => 
-    dispatch({type: ACTION.SET_CURRENT_TASK, payload: agent.Tasks.setCurrentTasks(id, lastUpdated), tasks})
+    dispatch({type: ACTION.SET_CURRENT_TASK, payload: agent.Tasks.setCurrentTask(id, lastUpdated), tasks})
 })
 
 class TaskSelect extends React.Component {
