@@ -56,6 +56,10 @@ class Statistics extends React.Component {
       this.date = this.parseQueryString(nextProps.history.location.search);
       this.date && this.props.getStats(this.date);  
     }
+
+    if (this.props.statsLoaded && !nextProps.statsLoaded) {
+      this.date && this.props.getStats(this.date);  
+    }
     
     this.setUpTasksIdMap(nextProps);
     

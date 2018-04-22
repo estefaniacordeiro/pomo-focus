@@ -74,6 +74,7 @@ export default (state={...defaultValues}, action) => {
       })
 
     case ACTION.REQUEST_STATS:
+    case ACTION.ADD_STATS:
       return ({
         ...state,
         statsLoaded: false
