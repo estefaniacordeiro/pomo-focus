@@ -43,7 +43,7 @@ const Settings = {
 const Tasks = {
   all: () => requests.get('/tasks/all'),
   addNewTask: task => requests.post('/tasks', { task }),
-  setCurrentTasks: (_id, lastUpdated) => requests.put('/tasks', { task: {_id, lastUpdated} }),
+  setCurrentTask: (_id, lastUpdated) => requests.put('/tasks', { task: {_id, lastUpdated} }),
   addStats: payload => 
     requests.put('/tasks', { task: payload }),
   changeName: payload => requests.put('/tasks/name', { task: payload}),

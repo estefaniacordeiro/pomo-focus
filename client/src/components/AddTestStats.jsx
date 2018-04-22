@@ -10,7 +10,7 @@ const Option = Select.Option;
 const mapStateToProps = state => ({
   tasks: state.tasks,
   stats: state.stats,
-
+  tasksLoaded: state.common.tasksLoaded
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -21,7 +21,8 @@ const mapDispatchToProps = dispatch => ({
       stats: payload
     }),
   setCurrentTask: (id, lastUpdated, tasks) => 
-    dispatch({type: ACTION.SET_CURRENT_TASK, payload: agent.Tasks.setCurrentTasks(id, lastUpdated), tasks})
+    dispatch({type: ACTION.SET_CURRENT_TASK, payload: agent.Tasks.setCurrentTask(id, lastUpdated), tasks}),
+  getAllTasks: () => dispatch({ type: ACTION.GET_ALL_TASKS, payload: agent.Tasks.all() })
 })
 
 class AddTestStats extends React.Component {
@@ -35,8 +36,29 @@ class AddTestStats extends React.Component {
     }
     this.defaultDateNTime = moment().format('YYYY-MM-DD HH:MM');
     console.log(this.defaultDateNTime);
-    
   }
+
+  componentWillMount() {
+    const {tasksLoaded, tasks } = this.props;
+    if (!tasksLoaded) {
+      this.props.getAllTasks();
+    } else {
+      this.setState({
+        tasksId: tasks.length ? tasks[0]._id : null
+      })
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { tasks } = nextProps;
+    if (!this.props.tasksLoaded && nextProps.tasksLoaded) {
+      this.setState({
+        taskId: tasks.length > 0 ? tasks[0]._id : null
+      })
+    }
+  }
+
+
 
   handleSelect = value => {
     this.setState({
@@ -73,24 +95,32 @@ class AddTestStats extends React.Component {
 
   handleSubmit = () => {
     const { dateNTime, focusTime, taskId } = this.state;
+    let taskName;
+    this.props.tasks.forEach( t => {
+      if (t._id === taskId) {
+        taskName = t.name;
+      }
+    })
     // 2018-04-10 10:30
     if (dateNTime.length !== 16 ) {
       return console.error('Date and time input is invalid');
     }
     const date = dateNTime.slice(0, 10);
     const endedAt = moment(dateNTime).add(focusTime, 'minutes').valueOf();
-    const payload = {_id: taskId, focusTime, endedAt, date};
-    console.log("ADD TEST STATS: " + payload);
+    const payload = {_id: taskId, name: taskName, focusTime, endedAt, date};
+    console.log("ADD TEST STATS: ");
+    console.log(payload);
     
+  
     this.props.addStats(payload);
   }
 
   render() {
     const { tasks } = this.props;
-    const { dateNTime, focusTime } = this.state;
+    const { dateNTime, focusTime, taskId } = this.state;
     return(
       <div style={{width: '500px', margin: '0 auto'}}>
-        <Select defaultValue={ tasks.length > 0 ? tasks[0]._id : null} onChange={this.handleSelect} >
+        <Select value={taskId} onChange={this.handleSelect} >
           { tasks.map( (task, index) => {
             return (
               <Option value={task._id} key={index}>{task.name}</Option>
