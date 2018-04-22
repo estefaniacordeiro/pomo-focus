@@ -23,14 +23,17 @@ const mapStateToProps = state => ({
   settingsOpen: state.settings.modalOpen,
   redirectTo: state.common.redirectTo,
   appLoaded: state.common.appLoaded,
-  error: state.common.error
+  error: state.common.error,
+  user: state.common.user
 })
 
 const mapDispatchToProps = dispatch => ({
   closeSettings: () => dispatch({ type: ACTION.CLOSE_SETTINGS, payload: { modalOpen: false}}),
   onRedirect: () => dispatch({ type: ACTION.REDIRECT }),
   getUserAndLoadApp: payload => dispatch({ type: ACTION.APP_LOAD, payload }),
-  clearError: () => dispatch({ type: ACTION.CLEAR_ERROR })
+  clearError: () => dispatch({ type: ACTION.CLEAR_ERROR }),
+  getAllTasks: () => dispatch({ type: ACTION.GET_ALL_TASKS, payload: agent.Tasks.all() }),
+  getSettings: () => dispatch({type: ACTION.GET_SETTINGS, payload: agent.Settings.current() }),
 })
 
 
@@ -59,6 +62,10 @@ class App extends Component {
     }
     if (!this.props.error && nextProps.error) {
       this.handleError(nextProps.error);
+    }
+    if (!this.props.user && nextProps.user) {
+      this.props.getAllTasks();
+      this.props.getSettings();
     }
   }
 
