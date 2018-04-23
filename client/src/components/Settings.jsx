@@ -43,16 +43,22 @@ class Settings extends React.Component {
 
 
   componentWillReceiveProps(nextProps) {
-    const { focusTime, shortBreak, longBreak, totalSessions, autoStartsBreak, sound } = nextProps;
-    this.setState({
-      focusTime,
-      shortBreak,
-      longBreak,
-      totalSessions,
-      autoStartsBreak,
-      sound,
-      visible: nextProps.visible
-    })
+    const { focusTime, shortBreak, longBreak, totalSessions, autoStartsBreak, sound, visible } = nextProps;
+    if (this.props.visible && !nextProps.visible) {
+      this.setState({
+        visible: nextProps.visible
+      })
+    } else {
+      this.setState({
+        focusTime,
+        shortBreak,
+        longBreak,
+        totalSessions,
+        autoStartsBreak,
+        sound,
+        visible
+      })
+    }
   }
 
   handleTimeChange = field => moment => {
@@ -96,6 +102,7 @@ class Settings extends React.Component {
       submitSettingsWithoutSignIn({ focusTime, shortBreak, longBreak, totalSessions, sound, autoStartsBreak });
     }
     close();
+    
   }
 
   handleSoundSelect = sound => {
