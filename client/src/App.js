@@ -24,7 +24,10 @@ const mapStateToProps = state => ({
   redirectTo: state.common.redirectTo,
   appLoaded: state.common.appLoaded,
   error: state.common.error,
-  user: state.common.user
+  user: state.common.user,
+  needUpdate: state.timer.needUpdate,
+  mode: state.timer.mode,
+  ...state.settings
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -34,6 +37,7 @@ const mapDispatchToProps = dispatch => ({
   clearError: () => dispatch({ type: ACTION.CLEAR_ERROR }),
   getAllTasks: () => dispatch({ type: ACTION.GET_ALL_TASKS, payload: agent.Tasks.all() }),
   getSettings: () => dispatch({type: ACTION.GET_SETTINGS, payload: agent.Settings.current() }),
+  setTimer: (payload) => dispatch({type: ACTION.SET_TIMER, payload}),
 })
 
 
@@ -67,6 +71,35 @@ class App extends Component {
       this.props.getAllTasks();
       this.props.getSettings();
     }
+
+    const { focusTime, shortBreak, longBreak, ticking } = nextProps;
+    // Timer ended or setting updated will fire setTimer()
+    if (!this.props.needUpdate && nextProps.needUpdate) {
+      this.setTimer({mode: this.props.mode, shortBreak, longBreak, focusTime, ticking});
+    }
+  }
+
+
+  setTimer(settings) {
+    const { mode, shortBreak, longBreak, focusTime, ticking } = settings;
+    if (ticking) return;
+    let min;
+    switch(mode) {
+      case 'focus':
+        min = focusTime;
+        break;
+      case 'short-break':
+        min = shortBreak;
+        break;
+      case 'long-break':
+        min = longBreak;
+        break;
+      default:
+        min = 0;
+        break;
+    }
+
+    this.props.setTimer({seconds: min * 60});
   }
 
   handleError = err => {

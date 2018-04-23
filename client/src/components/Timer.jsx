@@ -15,13 +15,13 @@ const mapStateToProps = state => ({
   minutesThisRound: state.timer.minutesThisRound,
   instance: state.timer.instance,
   user: state.common.user,
+  settingsUpdated: state.common.settingsUpdated,
   ...state.settings
 });
 
 const mapDispatchToProps = dispatch => ({
   startTimer: payload => dispatch({type: ACTION.START_TIMER, payload}),
   endTimer: payload => dispatch({type: ACTION.END_TIMER, payload}),
-  setTimer: (payload) => dispatch({type: ACTION.SET_TIMER, payload}),
   countDown: payload => dispatch({type: ACTION.COUNT_DOWN, payload }),
   setMode: payload => dispatch({type: ACTION.SET_MODE, payload}),
   setSessionNum: payload => dispatch({type: ACTION.SET_SESSION_NUMBER, payload}),
@@ -31,7 +31,8 @@ const mapDispatchToProps = dispatch => ({
       payload: Promise.all([agent.Tasks.addStats(payload), agent.Stats.addStats(payload)]),   
       stats: payload
     }),
-  throwError: error => dispatch({ type: ACTION.ERROR, payload: error })
+  throwError: error => dispatch({ type: ACTION.ERROR, payload: error }),
+  setTimer: (payload) => dispatch({type: ACTION.SET_TIMER, payload}),
 })
 
 class Timer extends React.Component {
@@ -44,41 +45,6 @@ class Timer extends React.Component {
     }
     this.timer = null;
     this.lastTimer = 0;
-    this.setTimer();
-  }
-
-  componentWillUnmount() {
-    console.log('Timer unmounted.');
-    
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { focusTime, shortBreak, longBreak, mode, ticking } = nextProps;
-    if (!ticking) {
-      this.setTimer({mode, shortBreak, longBreak, focusTime});
-    }
-  }
-
-  setTimer(params = this.props) {
-    const { mode, shortBreak, longBreak, focusTime, ticking } = params;
-    if (ticking) return;
-    let min;
-    switch(mode) {
-      case 'focus':
-        min = focusTime;
-        break;
-      case 'short-break':
-        min = shortBreak;
-        break;
-      case 'long-break':
-        min = longBreak;
-        break;
-      default:
-        min = 0;
-        break;
-    }
-    
-    this.props.setTimer({seconds: min * 60});
   }
 
   startTimer() {
@@ -136,36 +102,35 @@ class Timer extends React.Component {
 
     let text = `${mode} finished.`
 
-    if (autoStartsBreak && mode === 'Break') {
-      text += 'Click to start focus.';
-    }
+    // if (autoStartsBreak && mode === 'Break') {
+    //   text += 'Click to start focus.';
+    // }
 
-    if (!autoStartsBreak) {
-      text += `Click to start ${mode === 'Focus' ? 'break' : 'focus'}`; 
-    }
+    // if (!autoStartsBreak) {
+    //   text += `Click to start ${mode === 'Focus' ? 'break' : 'focus'}`; 
+    // }
 
     const noti = new Notification(text);
-    if ((autoStartsBreak && mode === 'Break') || !autoStartsBreak) {
-      noti.addEventListener('click', () => {
-        this.startTimer();
-      })
-    } 
+    // if ((autoStartsBreak && mode === 'Break') || !autoStartsBreak) {
+    //   noti.addEventListener('click', () => {
+    //     this.startTimer();
+    //   })
+    // } 
 
     setTimeout( () => noti.close(), 5000);
   }
 
-  resetTimer( mode, sessionNum) {
+  resetTimer( nextMode, nextSessionNum) {
     const { setMode, setSessionNum, autoStartsBreak  } = this.props;
-    setMode(mode);
-    setSessionNum(sessionNum);
-    autoStartsBreak && mode.includes('break') && this.startTimer();
+    setMode(nextMode);
+    setSessionNum(nextSessionNum);
+    autoStartsBreak && nextMode.includes('break') && this.startTimer();
   }
 
   interrupt() {
     const { instance, endTimer } = this.props;
     clearInterval(instance);
     endTimer({ticking: false, instance: null});
-    this.setTimer()
   }
 
   clickTimer() {

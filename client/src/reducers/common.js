@@ -8,7 +8,7 @@ const defaultValues = {
   appLoaded: false,
   tasksLoaded: false,
   statsLoaded: false,
-  error: null
+  error: null,
 }
 
 export default (state={...defaultValues}, action) => {
