@@ -183,12 +183,12 @@ class Settings extends React.Component {
             <i className="fas fa-play-circle play-sound" onClick={this.playSound} />
           </div>
         </div>
-        <div className="Settings-item">
+        {/* <div className="Settings-item">
           <div className="Settings-item-name">Auto starts break</div>
           <div className="Settings-item-content">
             <Switch checked={autoStartsBreak} onChange={this.handleAutoStartsBreak} />
           </div>
-        </div>
+        </div> */}
       </div>
 
       
