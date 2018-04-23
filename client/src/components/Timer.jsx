@@ -124,7 +124,7 @@ class Timer extends React.Component {
     const { setMode, setSessionNum, autoStartsBreak  } = this.props;
     setMode(nextMode);
     setSessionNum(nextSessionNum);
-    autoStartsBreak && nextMode.includes('break') && this.startTimer();
+    // autoStartsBreak && nextMode.includes('break') && this.startTimer();
   }
 
   interrupt() {
