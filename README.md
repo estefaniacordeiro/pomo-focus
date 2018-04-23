@@ -38,7 +38,7 @@ Please sign in the demo account to see the demo data. email: demo@demo.com,  pas
 
     User could customize the time of each session.
     
-    Auto starts break means after each focus, break will start automatically.
+    ~~Auto starts break means after each focus, break will start automatically.~~
 
 5. Statistics
 
