@@ -7,7 +7,27 @@ I have deployed the app on Heroku.com. Please try the demo here: [Pomo Timer](ht
 
 At the moment, the app has only been developed and tested in Chrome. So plese run the app in Chrome.
 
-Please sign in the demo account to see the demo data. email: demo@demo.com,  password: sdfjkl
+## How to run the app locally
+
+
+
+`git clone git@github.com:seainfo6250/project-ruby.git`
+
+`cd project-ruby`
+
+`npm install`
+
+`npm start`
+
+Note: make sure you have install MongoDB before you run this app. Only need to `npm install` and `npm start` once, as I use `concurrently` to do the rest in the `start` script.
+
+## Demo account
+
+Please sign in the demo account on the version I deploy on Heroku to see the demo data. 
+
+`email: demo@demo.com,  password: sdfjkl`
+
+The demo statistics introduced below is according to this account.
 
 ## Features
 1. Sign up & Sign in
