@@ -1,5 +1,4 @@
 # Pomo Timer
-This is Qianchen He’s final project for class INFO6250 Web Development Tools & Methods. 
 
 The basic idea of this app is using [Pomodoro Technique](https://en.wikipedia.org/wiki/Pomodoro_Technique) to boost our studying or working efficiency.
 
